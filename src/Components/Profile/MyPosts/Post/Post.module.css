@@ -1,0 +1,16 @@
+.main_item{
+    align-content: center;
+    padding-left: 50px;
+    min-height: 3rem;
+    max-height: 10rem;
+}
+
+.main_item:after{
+    position: absolute;
+    content: '';
+    width: 30px;
+    height: 30px;
+    background: #000;
+    border-radius: 50%;
+    left: 0;
+}

@@ -1,5 +1,6 @@
 import React from 'react';
 import classes from './Profile.module.css'
+import MyPosts from "./MyPosts/MyPosts";
 
 const Profile = () => {
     return (
@@ -20,17 +21,7 @@ const Profile = () => {
                     </ul>
                 </div>
             </div>
-            <div className={classes.main_post}>
-                <h3 >My posts</h3>
-                <input type="textarea" placeholder='Send...' className={classes.main_input} />
-                <button className={classes.main_button}>Send...</button>
-            </div>
-            <div>
-                <ul className={classes.main_list}>
-                    <li className={classes.main_item}>Hey, why nobody love me?</li>
-                    <li className={classes.main_item}>Hello World!!!</li>
-                </ul>
-            </div>
+            <MyPosts/>
         </div>
     );
 };
