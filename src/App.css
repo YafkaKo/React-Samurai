@@ -1,0 +1,29 @@
+ul{
+    margin: 0;
+    padding: 0;
+}
+li{
+    list-style: none;
+    margin: 0;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+a:hover{
+    text-decoration: underline;
+}
+
+.App{
+    margin: 0;
+ display: grid;
+  grid-template-areas: 'header header header'
+'nav main main';
+    grid-template-rows: 60px auto;
+    grid-template-columns: 2fr 10fr;
+    grid-gap: 15px;
+    font-weight: 800;
+    font-size: 24px;
+}
+
+

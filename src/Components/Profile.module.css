@@ -1,5 +1,5 @@
 
-.App-main {
+.main {
     background: lightgray;
     grid-area: main;
     padding: 15px;
@@ -17,12 +17,12 @@
     font-weight: normal;
 }
 
-.main_profile img{
+.main_img{
     width: 200px;
     height: 200px;
 }
 
-.main_profile-title{
+.main_title{
     margin-top: 0;
 }
 
@@ -31,7 +31,7 @@
     flex-direction: column;
 }
 
-.main_post-input{
+.main_input{
     border: none;
     height: 5rem;
     padding: 15px;
@@ -39,32 +39,32 @@
     font-size: 18px;
 }
 
-.main_post-button{
+.main_button{
     padding: 15px 0;
     margin-bottom: 15px;
     font-size: 18px;
     border: none;
 }
-.main_post-button:hover{
+.main_button:hover{
     cursor: pointer;
     opacity: 0.7;
 }
 
-.main_chat-list{
+.main_list{
     display: flex;
     flex-direction: column;
     gap: 15px;
     position: relative;
 }
 
-.main_chat-item{
+.main_item{
     align-content: center;
     padding-left: 50px;
     min-height: 3rem;
     max-height: 10rem;
 }
 
-.main_chat-item:after{
+.main_item:after{
     position: absolute;
     content: '';
     width: 30px;

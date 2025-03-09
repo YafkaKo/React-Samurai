@@ -1,9 +1,9 @@
-.App-header {
+.header {
     background: lightgray;
     grid-area: header;
     padding-left: 30px;
 }
 
-.App-header img{
+.header img{
     width: 60px;
 }
