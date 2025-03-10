@@ -1,9 +1,0 @@
-.header {
-    background: lightgray;
-    grid-area: header;
-    padding-left: 30px;
-}
-
-.header img{
-    width: 60px;
-}
