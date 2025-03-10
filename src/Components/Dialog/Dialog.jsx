@@ -7,7 +7,8 @@ export default function Dialog() {
         <Box sx={{
             bgcolor: "lightgray",
             width: "100%",
-            display: "flex"
+            display: "flex",
+            padding: "15px",
         }}>
             <Typography sx={{fontWeight: "bold"}} variant="h4" component="h4">Dialogs</Typography>
         </Box>

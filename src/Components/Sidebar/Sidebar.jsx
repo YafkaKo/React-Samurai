@@ -1,6 +1,6 @@
 import React from 'react';
-import Link from '@mui/material/Link';
-import {Box, List, ListItem} from "@mui/material";
+import {Box, List} from "@mui/material";
+import CustomNavLink from "./CustomNavLink/CustomNavLink";
 
 const links = [
     {
@@ -27,23 +27,16 @@ const links = [
 
 const Sidebar = () => {
     return (
-        <Box component='nav' sx={{bgcolor: "lightgray",p: '15px',fontWeight: "bold"}}>
-                <List sx={{p:0}}>
-                    {
-                        links.map(link => {
-                            return (
-                                <ListItem
-                                    key={link.id}
-                                    disableGutters
-                                >
-                                    <Link key={link.id} href={link.link} color="inherit" underline="hover">
-                                        {link.name}
-                                    </Link>
-                                </ListItem>
-                            )
-                        })
-                    }
-                </List>
+        <Box component='nav' sx={{bgcolor: "lightgray", p: '15px', fontWeight: "bold"}}>
+            <List sx={{p: 0}}>
+                {
+                    links.map(link => {
+                        return (
+                            <CustomNavLink key={link.id} to={link.link} text={link.name}/>
+                        )
+                    })
+                }
+            </List>
         </Box>
     );
 };
