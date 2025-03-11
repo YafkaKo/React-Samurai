@@ -64,7 +64,7 @@ const MyPosts = () => {
                         style={{width: "100%"}} // Добавьте стили здесь
                     />
                 </Box>
-                <Button sx={{marginTop: "15px"}} variant="contained" color="inherit" endIcon={<SendIcon/>}
+                <Button sx={{marginTop: "15px"}} variant="contained" endIcon={<SendIcon/>}
                         onClick={() => addPost("name", 0)}
                 >Send...</Button>
             </Box>

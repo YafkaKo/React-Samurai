@@ -1,11 +1,22 @@
 import React from 'react';
-import {Container, Box} from "@mui/material";
+import {Container, Link} from "@mui/material";
+import socialNetworkTheme from "../../SocialNetwordTheme";
+import {ThemeProvider} from "@mui/material/styles";
+import CallEndSharpIcon from '@mui/icons-material/CallEndSharp';
+
 
 const Header = () => {
     return (
-        <Container component="header" sx={{pt: 2, pb:2, marginBottom: 2,bgcolor: "lightgray" }}>
-            <Box component="img" src="https://www.svgrepo.com/show/455351/logo.svg" alt="Logo" sx={{height: 60,width: 60, display: "flex",alignItems: "center"}}></Box>
-        </Container>
+        <ThemeProvider theme={socialNetworkTheme}>
+            <Container component="header" sx={{pt: 2, pb: 2,
+                borderBottom: "2px solid",
+                borderColor: "background.default"
+            }}>
+                <Link href="/profile">
+                    <CallEndSharpIcon sx={{ fontSize: 60, color: 'primary.main' , display:"flex",alignItems:"center"}} />
+                </Link>
+            </Container>
+        </ThemeProvider>
     );
 };
 

@@ -1,6 +1,8 @@
 import React from 'react';
 import {Box, List} from "@mui/material";
 import CustomNavLink from "./CustomNavLink/CustomNavLink";
+import {ThemeProvider} from "@mui/material/styles";
+import socialNetwordTheme from "../../SocialNetwordTheme";
 
 const links = [
     {
@@ -27,17 +29,22 @@ const links = [
 
 const Sidebar = () => {
     return (
-        <Box component='nav' sx={{bgcolor: "lightgray", p: '15px', fontWeight: "bold"}}>
-            <List sx={{p: 0}}>
-                {
-                    links.map(link => {
-                        return (
-                            <CustomNavLink key={link.id} to={link.link} text={link.name}/>
-                        )
-                    })
-                }
-            </List>
-        </Box>
+        <ThemeProvider theme={socialNetwordTheme}>
+            <Box component='nav' sx={{p: '15px',
+                borderRight: "2px solid",
+                borderColor: "background.default"
+            }}>
+                <List sx={{p: 0}}>
+                    {
+                        links.map(link => {
+                            return (
+                                <CustomNavLink key={link.id} to={link.link} text={link.name}/>
+                            )
+                        })
+                    }
+                </List>
+            </Box>
+        </ThemeProvider>
     );
 };
 
