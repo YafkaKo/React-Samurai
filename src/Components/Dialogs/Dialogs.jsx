@@ -2,9 +2,11 @@ import React from 'react';
 import {Box, Divider, Stack, Tab, Tabs, Typography} from "@mui/material";
 import {ThemeProvider} from "@mui/material/styles";
 import socialNetworkTheme from "../../SocialNetwordTheme";
+import {useNavigate,useParams } from "react-router-dom";
 
 
 export default function Dialogs() {
+    const navigate = useNavigate();
 
     const chats = [
         {
@@ -129,14 +131,19 @@ export default function Dialogs() {
         }
     ];
 
-
-    const [chatUser, setChatUser] = React.useState(0);
+    const  {chatId}  = useParams(); // Получаем chatId из URL
+    const [chatUser, setChatUser] = React.useState(chatId ? parseInt(chatId) : null);
 
     const handleChange = (event, chatUser) => {
         setChatUser(chatUser);
+        navigate(`/dialogs/${chatUser}`);
     };
 
-    const activeChat = chats.find((chat) => chat.id === chatUser + 1);
+    let activeChat = undefined;
+    if(typeof chatUser === 'number'){
+        activeChat = chats.find((chat) => chat.id === chatUser+1);
+    }
+
 
     return (
         <ThemeProvider theme={socialNetworkTheme}>

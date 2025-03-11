@@ -23,6 +23,7 @@ function App() {
                         <Routes>
                             <Route path="/profile" element={<Profile/>}/>
                             <Route path="/dialogs" element={<Dialogs/>}/>
+                            <Route path="/dialogs/:chatId" element={<Dialogs/>}/>
                             {/*<Route path="/news" element={<News/>}/>*/}
                             {/*<Route path="/settings" element={<Settings/>}/>*/}
                         </Routes>
