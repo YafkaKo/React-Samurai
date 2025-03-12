@@ -4,30 +4,8 @@ import SendIcon from '@mui/icons-material/Send';
 import {Box, Typography, TextareaAutosize, Button, List, ListItem} from "@mui/material";
 
 
-const MyPosts = () => {
-    const [posts, setPosts] = useState([
-        {
-            id: 1,
-            user: "Алексей",
-            avatar: "A",
-            text: "Отличный пост!",
-            likes: 10,
-        },
-        {
-            id: 2,
-            user: "Мария",
-            avatar: "M",
-            text: "Спасибо за информацию!",
-            likes: 5,
-        },
-        {
-            id: 3,
-            user: "Иван",
-            avatar: "I",
-            text: "Интересно, жду продолжения.",
-            likes: 3,
-        },
-    ]);
+const MyPosts = (props) => {
+    const [posts, setPosts] = useState(props.posts);
 
     const [textValue, setTextValue] = useState("");
 

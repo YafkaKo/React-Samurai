@@ -1,8 +1,6 @@
 import React from 'react';
 import {Box, List} from "@mui/material";
 import CustomNavLink from "./CustomNavLink/CustomNavLink";
-import {ThemeProvider} from "@mui/material/styles";
-import socialNetwordTheme from "../../SocialNetwordTheme";
 
 const links = [
     {
@@ -29,7 +27,6 @@ const links = [
 
 const Sidebar = () => {
     return (
-        <ThemeProvider theme={socialNetwordTheme}>
             <Box component='nav' sx={{p: '15px',
                 borderRight: "2px solid",
                 borderColor: "background.default"
@@ -44,7 +41,6 @@ const Sidebar = () => {
                     }
                 </List>
             </Box>
-        </ThemeProvider>
     );
 };
 

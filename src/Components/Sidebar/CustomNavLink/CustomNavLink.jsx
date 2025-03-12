@@ -5,8 +5,8 @@ import {ListItem, ListItemText} from "@mui/material";
 function CustomNavLink({to, text}) {
     return (
         <NavLink to={to} style={{textDecoration: "none", color: "inherit",}}>
-            <ListItem disablePadding disableGutters>
-                <ListItemText disablePadding disableGutters sx={{
+            <ListItem>
+                <ListItemText sx={{
                     "& span": {fontWeight: "bold", fontSize: "inherit"},
                     "&:hover": {textDecoration: "underline"}
                 }} primary={text}/>
