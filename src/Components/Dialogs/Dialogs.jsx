@@ -6,7 +6,7 @@ import SendIcon from '@mui/icons-material/Send'
 
 
 export default function Dialogs(props) {
-
+  const {addMessage} = props
   const {chats} = props.Dialogs
 
   const navigate = useNavigate()
@@ -47,8 +47,9 @@ export default function Dialogs(props) {
       timestamp: new Date().toISOString(),
       isMyMessage: true
     }
-    console.log(newMessage)
+    addMessage(activeChat.id,newMessage)
     setMessages([...messages, newMessage])
+    setInputValue('')
   }
 
   function handleInput(event) {

@@ -1,11 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App'
-import state from './State'
-import {CssBaseline} from '@mui/material'
-import socialNetworkTheme from './SocialNetworkTheme'
 import {BrowserRouter} from 'react-router-dom'
+import App from './App'
+import state, {addMessage, addPost} from './State'
+import socialNetworkTheme from './SocialNetworkTheme'
+import {CssBaseline} from '@mui/material'
 import {ThemeProvider} from '@mui/material/styles'
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
@@ -13,7 +14,7 @@ root.render(
     <BrowserRouter>
       <CssBaseline/>
       <ThemeProvider theme={socialNetworkTheme}>
-        <App state={state}/>
+        <App state={state} addMessage={addMessage} addPost={addPost}/>
       </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>

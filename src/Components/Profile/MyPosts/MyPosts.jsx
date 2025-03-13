@@ -5,6 +5,7 @@ import {Box, Button, List, ListItem, TextareaAutosize, Typography} from '@mui/ma
 
 
 const MyPosts = (props) => {
+  const {addPost} = props
   const [posts, setPosts] = useState(props.posts)
 
   const textareaRef = useRef()
@@ -13,17 +14,16 @@ const MyPosts = (props) => {
     textareaRef.current.focus()
   })
 
-  function addPost(name, likes) {
-    let lastElement = posts.length - 1
-
+  function handlePost(name, likes) {
     let newElement =
       {
-        id: posts[lastElement].id + 1,
+        id: posts.length + 1,
         user: name,
         avatar: name.slice(0, 1).toUpperCase(),
         text: textareaRef.current.value,
         likes: likes,
       }
+    addPost(newElement)
     setPosts([...posts, newElement])
     textareaRef.current.value = ''
   }
@@ -36,15 +36,13 @@ const MyPosts = (props) => {
         <Box sx={{marginBottom: '15px'}}>
           <TextareaAutosize
             ref={textareaRef}
-            // value={textValue}
-            // onChange={handleTextareaChange}
             minRows={3}
             placeholder="Send..."
             style={{width: '100%'}} // Добавьте стили здесь
           />
         </Box>
         <Button sx={{marginTop: '15px'}} variant="contained" endIcon={<SendIcon/>}
-                onClick={() => addPost('name', 0)}
+                onClick={() => handlePost('name', 0)}
         >Send...</Button>
       </Box>
       <List>
