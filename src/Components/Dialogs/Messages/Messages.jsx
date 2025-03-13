@@ -1,10 +1,10 @@
-import React from 'react';
-import {Box, Stack, Typography} from "@mui/material";
+import React from 'react'
+import {Box, Stack, Typography} from '@mui/material'
 
 function Messages(props) {
-    const {messages} = props.activeChat;
+    const {messages,nickname} = props
     return (
-        <Stack spacing={2}>
+        <Stack spacing={2} sx={{flexGrow: '1'}}>
 
             {messages.map((message) => (
                 <Box
@@ -19,7 +19,7 @@ function Messages(props) {
                     }}
                 >
                     <Typography sx={{display: "block", textAlign: "left", fontWeight: "600", color: "primary.main"}}>
-                        {message.isMyMessage ? "Me" : message.nickname}
+                        {message.isMyMessage ? "Me" : nickname}
                     </Typography>
                     <Typography>{message.text}</Typography>
                 </Box>

@@ -1,22 +1,23 @@
-import React from 'react';
-import {Container, Box, CssBaseline} from "@mui/material"
-import {ThemeProvider} from '@mui/material/styles';
-import socialNetworkTheme from './SocialNetworkTheme'
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import React from 'react'
+import {Box, Container} from '@mui/material'
+import {Route, Routes} from 'react-router-dom'
 
-import Header from "./Components/Header/Header";
-import Sidebar from "./Components/Sidebar/Sidebar";
-import Profile from "./Components/Profile/Profile";
-import Dialogs from "./Components/Dialogs/Dialogs";
+import Header from './Components/Header/Header'
+import Sidebar from './Components/Sidebar/Sidebar'
+import Profile from './Components/Profile/Profile'
+import Dialogs from './Components/Dialogs/Dialogs'
 
 function App(props) {
     const {ProfilePage,DialogsPage} = props.state
     return (
 
-        <BrowserRouter>
-            <CssBaseline />
-            <ThemeProvider theme={socialNetworkTheme}>
-                <Container disableGutters sx={{bgcolor: "secondary.main",fontSize: 24,minHeight: "100vh",display:"flex",flexDirection: "column"}}>
+
+                <Container disableGutters sx={{
+                    bgcolor: 'secondary.main',
+                    fontSize: 24,
+                    minHeight: '100vh',
+                    display: 'flex',
+                    flexDirection: 'column'}}>
                 <Header/>
                     <Box sx={{p: 0, display: "flex",flexGrow: "1"}}>
                         <Sidebar/>
@@ -29,8 +30,7 @@ function App(props) {
                         </Routes>
                     </Box>
                 </Container>
-            </ThemeProvider>
-        </BrowserRouter>
+
     );
 }
 
