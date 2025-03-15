@@ -9,7 +9,7 @@ import Dialogs from './Components/Dialogs/Dialogs'
 
 function App(props) {
   const { ProfilePage, DialogsPage } = props.state
-  const { addMessage, addPost } = props
+  const { dispatch } = props
   return (
     <Container disableGutters sx={{
       bgcolor: 'secondary.main',
@@ -22,9 +22,9 @@ function App(props) {
       <Box sx={{ p: 0, display: 'flex', flexGrow: '1' }}>
         <Sidebar />
         <Routes>
-          <Route path="/profile" element={<Profile Profile={ProfilePage} addPost={addPost} />} />
-          <Route path="/dialogs" element={<Dialogs Dialogs={DialogsPage} addMessage={addMessage} />} />
-          <Route path="/dialogs/:chatId" element={<Dialogs Dialogs={DialogsPage} addMessage={addMessage} />} />
+          <Route path="/profile" element={<Profile Profile={ProfilePage} dispatch={dispatch} />} />
+          <Route path="/dialogs" element={<Dialogs Dialogs={DialogsPage} dispatch={dispatch} />} />
+          <Route path="/dialogs/:chatId" element={<Dialogs Dialogs={DialogsPage} dispatch={dispatch} />} />
           {/*<Route path="/news" element={<News/>}/>*/}
           {/*<Route path="/settings" element={<Settings/>}/>*/}
         </Routes>

@@ -9,12 +9,13 @@ import store from './State'
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
+
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <CssBaseline />
       <ThemeProvider theme={socialNetworkTheme}>
-        <App state={store.getState()} addMessage={store.addMessage.bind(store)} addPost={store.addPost.bind(store)} />
+        <App state={store.getState()} dispatch={store.dispatch.bind(store)} />
       </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>
