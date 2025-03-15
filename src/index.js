@@ -1,20 +1,20 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import {BrowserRouter} from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 import App from './App'
-import state, {addMessage, addPost} from './State'
 import socialNetworkTheme from './SocialNetworkTheme'
-import {CssBaseline} from '@mui/material'
-import {ThemeProvider} from '@mui/material/styles'
+import { CssBaseline } from '@mui/material'
+import { ThemeProvider } from '@mui/material/styles'
+import store from './State'
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <CssBaseline/>
+      <CssBaseline />
       <ThemeProvider theme={socialNetworkTheme}>
-        <App state={state} addMessage={addMessage} addPost={addPost}/>
+        <App state={store.getState()} addMessage={store.addMessage.bind(store)} addPost={store.addPost.bind(store)} />
       </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>

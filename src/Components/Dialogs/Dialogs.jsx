@@ -10,28 +10,28 @@ export default function Dialogs(props) {
   const {chats} = props.Dialogs
 
   const navigate = useNavigate()
-  const textareaRef = useRef(null)
   const {chatId} = useParams()
   const [chatUser, setChatUser] = React.useState(chatId ? parseInt(chatId) : false)
   const [messages, setMessages] = React.useState([])
   const [inputValue, setInputValue] = React.useState('')
-  let activeChat = undefined
+  const textareaRef = useRef(null)
+  let activeChat = useRef(null)
 
   if (typeof chatUser === 'number') {
     activeChat = chats.find((chat) => chat.id === chatUser)
   }
 
   useEffect(() => {
-    if (activeChat) {
+    if(activeChat) {
       setMessages(activeChat.messages)
     }
-  }, [activeChat]) // Зависимость от activeChat
+  }, [activeChat])
 
   useEffect(() => {
     if (textareaRef.current && activeChat) {
       textareaRef.current.focus()
     }
-  }, [activeChat]) // Зависимость от activeChat
+  }, [activeChat])
 
   const handleChange = (event, chatUser) => {
     ++chatUser
@@ -40,7 +40,6 @@ export default function Dialogs(props) {
   }
 
   function handleMessage() {
-
     let newMessage = {
       id: messages.length + 1,
       text: inputValue,
