@@ -10,6 +10,8 @@ import {
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 
 function Post({ user, avatar, text, likes }) {
+
+    
     const [likeCount, setLikeCount] = React.useState(likes);
     const likesInStart = likes;
     const likesInEnd = likes+1;

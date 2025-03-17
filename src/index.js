@@ -5,7 +5,8 @@ import App from './App'
 import socialNetworkTheme from './SocialNetworkTheme'
 import { CssBaseline } from '@mui/material'
 import { ThemeProvider } from '@mui/material/styles'
-import store from './redux/State'
+import store from './redux/redux-store'
+import { Provider } from 'react-redux';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
@@ -15,7 +16,9 @@ root.render(
     <BrowserRouter>
       <CssBaseline />
       <ThemeProvider theme={socialNetworkTheme}>
-        <App state={store.getState()} dispatch={store.dispatch.bind(store)} />
+        <Provider store={store}>
+          <App />
+        </Provider>
       </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>

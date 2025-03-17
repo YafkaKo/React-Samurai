@@ -7,9 +7,8 @@ import Sidebar from './Components/Sidebar/Sidebar'
 import Profile from './Components/Profile/Profile'
 import Dialogs from './Components/Dialogs/Dialogs'
 
-function App(props) {
-  const { ProfilePage, DialogsPage } = props.state
-  const { dispatch } = props
+function App() {
+
   return (
     <Container disableGutters sx={{
       bgcolor: 'secondary.main',
@@ -22,9 +21,9 @@ function App(props) {
       <Box sx={{ p: 0, display: 'flex', flexGrow: '1' }}>
         <Sidebar />
         <Routes>
-          <Route path="/profile" element={<Profile Profile={ProfilePage} dispatch={dispatch} />} />
-          <Route path="/dialogs" element={<Dialogs Dialogs={DialogsPage} dispatch={dispatch} />} />
-          <Route path="/dialogs/:chatId" element={<Dialogs Dialogs={DialogsPage} dispatch={dispatch} />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/dialogs" element={<Dialogs />} />
+          <Route path="/dialogs/:chatId" element={<Dialogs />} />
           {/*<Route path="/news" element={<News/>}/>*/}
           {/*<Route path="/settings" element={<Settings/>}/>*/}
         </Routes>

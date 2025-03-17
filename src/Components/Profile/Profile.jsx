@@ -2,9 +2,8 @@ import React from 'react'
 import MyPosts from './MyPosts/MyPosts'
 import { Avatar, Box, List, ListItem, Typography } from '@mui/material'
 
-const Profile = (props) => {
-    const { posts } = props.Profile;
-    const { dispatch } = props;
+const Profile = () => {
+
     return (
         <Box sx={{ p: "15px", width: "100%" }}>
             <Box component="img" sx={{ width: "100%", height: "300px", mb: "15px" }} src="https://i.pinimg.com/736x/82/b5/80/82b580dab030b6397b874244058c13df.jpg" alt="" />
@@ -20,7 +19,7 @@ const Profile = (props) => {
                     </List>
                 </Box>
             </Box>
-            <MyPosts posts={posts} dispatch={dispatch} />
+            <MyPosts/>
         </Box>
     );
 };

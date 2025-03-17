@@ -1,13 +1,43 @@
-import { DispatchConst } from './State'
+import { DispatchConst } from './store'
 
-const profileReducer = (state, action) => {
+const initialState = {
+  posts: [
+    {
+      id: 1,
+      user: 'Алексей',
+      avatar: 'A',
+      text: 'Отличный пост!',
+      likes: 10,
+    },
+    {
+      id: 2,
+      user: 'Мария',
+      avatar: 'M',
+      text: 'Спасибо за информацию!',
+      likes: 5,
+    },
+    {
+      id: 3,
+      user: 'Иван',
+      avatar: 'I',
+      text: 'Интересно, жду продолжения.',
+      likes: 3,
+    },
+  ]
+}
 
-  if (action.type === DispatchConst.ADD_POST) {
-    state.posts.push(action.newPost)
-    console.log(DispatchConst.ADD_POST)
+const profileReducer = (state = initialState, action) => {
+  switch (action.type) {
+
+    case DispatchConst.ADD_POST:
+      console.log({ posts: [...state.posts, action.newPost] })
+      return {
+        posts: [...state.posts, action.newPost],
+      }
+
+    default:
+      return state
   }
-
-  return state
 }
 
 export default profileReducer

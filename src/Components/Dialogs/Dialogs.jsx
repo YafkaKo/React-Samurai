@@ -1,63 +1,42 @@
-import React, { useEffect, useRef } from 'react'
-import { Avatar, Box, Divider, IconButton, Input, Stack, Tab, Tabs, Typography } from '@mui/material'
+import React, { useRef } from 'react'
+import { Avatar, Box, Divider, Stack, Tab, Tabs, Typography } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
-import Messages from './Messages/Messages'
-import SendIcon from '@mui/icons-material/Send'
-import { DispatchConst } from '../../redux/State'
+import MessagesActive from './MessagesActive/MessagesActive'
+import { useSelector } from 'react-redux'
 
 
-export default function Dialogs(props) {
-  const { dispatch } = props
-  const { chats } = props.Dialogs
+export default function Dialogs() {
+  const chats = useSelector(state => state.dialogsPage.chats)
 
   const navigate = useNavigate()
   const { chatId } = useParams()
   const [chatUser, setChatUser] = React.useState(chatId ? parseInt(chatId) : 0)
-  const [messages, setMessages] = React.useState([])
-  const [inputValue, setInputValue] = React.useState('')
-  const textareaRef = useRef(null)
+
   let activeChat = useRef(null)
 
   if (typeof chatUser === 'number') {
     activeChat = chats.find((chat) => chat.id === chatUser)
   }
 
-  useEffect(() => {
-    if (activeChat) {
-      setMessages(activeChat.messages)
-      setInputValue(activeChat.newMessageText)
-    }
-  }, [activeChat])
+  // useEffect(() => {
+  //   if (activeChat) {
+  //     setMessages(activeChat.messages)
+  //     setInputValue(activeChat.newMessageText)
+  //   }
+  // }, [activeChat])
 
 
 
-  useEffect(() => {
-    if (textareaRef.current && activeChat) {
-      textareaRef.current.focus()
-    }
-  }, [activeChat])
+  // useEffect(() => {
+  //   if (textareaRef.current && activeChat) {
+  //     textareaRef.current.focus()
+  //   }
+  // }, [activeChat])
 
   const handleChange = (event, chatUser) => {
     ++chatUser
     setChatUser(chatUser)
     navigate(`/dialogs/${chatUser}`)
-  }
-
-  function handleMessage() {
-    let newMessage = {
-      id: messages.length + 1,
-      text: inputValue,
-      timestamp: new Date().toISOString(),
-      isMyMessage: true
-    }
-    dispatch({ type: DispatchConst.ADD_MESSAGE, idOfUser: activeChat.id, newMessage: newMessage })
-    setMessages([...messages, newMessage])
-    setInputValue('')
-  }
-
-  function handleInput(event) {
-    setInputValue(event.target.value)
-    dispatch({ type: DispatchConst.ADD_MESSAGE, idOfUser: activeChat.id, newMessageText: event.target.value })
   }
 
   return (
@@ -78,7 +57,7 @@ export default function Dialogs(props) {
           aria-label="basic tabs example">
           {chats.map((chat) => (
             <Tab key={chat.id}
-              label={<><Avatar>{chat.avatar = chat.nickname.slice(0, 1).toUpperCase()}</Avatar>{chat.nickname}</>}
+              label={<><Avatar>{chat.nickname.slice(0, 1).toUpperCase()}</Avatar>{chat.nickname}</>}
               sx={{
                 fontSize: 24,
                 color: 'text.primary',
@@ -93,18 +72,8 @@ export default function Dialogs(props) {
         </Tabs>
         <Box sx={{ display: 'flex', flexGrow: 1, padding: '10px' }}>
           {activeChat ? (
-            <Stack direction="column" sx={{ flexGrow: '1' }}>
-              <Messages messages={messages} nickname={activeChat.nickname} />
-              <Stack direction="row" spacing={2}>
-                <Input onChange={handleInput} multiline placeholder="Send a message..." fullWidth value={inputValue} />
-                <IconButton onClick={() => handleMessage()} sx={{
-                  width: '50px',
-                  height: '50px',
-                  borderRadius: '50%',
-                  backgroundColor: '#FFFFFF'
-                }}><SendIcon /></IconButton>
-              </Stack>
-            </Stack>
+            <MessagesActive activeChat={activeChat}></MessagesActive>
+
           ) : (
             <Typography variant="h4" sx={{ textAlign: 'center' }}>Select a chat to start messaging</Typography>
           )}

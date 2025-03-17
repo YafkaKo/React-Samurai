@@ -1,20 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Post from './Post/Post'
 import SendIcon from '@mui/icons-material/Send'
 import { Box, Button, List, ListItem, TextareaAutosize, Typography } from '@mui/material'
-import { DispatchConst } from '../../../redux/State'
+import { DispatchConst } from '../../../redux/store'
+import { useSelector, useDispatch } from 'react-redux';
 
 
 
-const MyPosts = (props) => {
-  const { dispatch } = props
-  const [posts, setPosts] = useState(props.posts)
-
+const MyPosts = () => {
+  const dispatch = useDispatch();
+  const posts = useSelector((state) => state.profilePage.posts)
   const textareaRef = useRef()
 
   useEffect(() => {
     textareaRef.current.focus()
-  })
+  }, [])
 
   function handlePost(name, likes) {
     let newElement =
@@ -26,10 +26,8 @@ const MyPosts = (props) => {
       likes: likes,
     }
     dispatch({ type: DispatchConst.ADD_POST, newPost: newElement })
-    setPosts([...posts, newElement])
     textareaRef.current.value = ''
   }
-
 
   return (
     <Box>
@@ -40,7 +38,7 @@ const MyPosts = (props) => {
             ref={textareaRef}
             minRows={3}
             placeholder="Send..."
-            style={{ width: '100%' }} // Добавьте стили здесь
+            style={{ width: '100%' }}
           />
         </Box>
         <Button sx={{ marginTop: '15px' }} variant="contained" endIcon={<SendIcon />}
