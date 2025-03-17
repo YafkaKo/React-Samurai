@@ -3,6 +3,7 @@ import { Avatar, Box, Divider, IconButton, Input, Stack, Tab, Tabs, Typography }
 import { useNavigate, useParams } from 'react-router-dom'
 import Messages from './Messages/Messages'
 import SendIcon from '@mui/icons-material/Send'
+import { DispatchConst } from '../../redux/State'
 
 
 export default function Dialogs(props) {
@@ -11,7 +12,7 @@ export default function Dialogs(props) {
 
   const navigate = useNavigate()
   const { chatId } = useParams()
-  const [chatUser, setChatUser] = React.useState(chatId ? parseInt(chatId) : false)
+  const [chatUser, setChatUser] = React.useState(chatId ? parseInt(chatId) : 0)
   const [messages, setMessages] = React.useState([])
   const [inputValue, setInputValue] = React.useState('')
   const textareaRef = useRef(null)
@@ -24,8 +25,11 @@ export default function Dialogs(props) {
   useEffect(() => {
     if (activeChat) {
       setMessages(activeChat.messages)
+      setInputValue(activeChat.newMessageText)
     }
   }, [activeChat])
+
+
 
   useEffect(() => {
     if (textareaRef.current && activeChat) {
@@ -46,13 +50,14 @@ export default function Dialogs(props) {
       timestamp: new Date().toISOString(),
       isMyMessage: true
     }
-    dispatch({ type: 'ADD-MESSAGE', idOfUser: activeChat.id, newMessage: newMessage })
+    dispatch({ type: DispatchConst.ADD_MESSAGE, idOfUser: activeChat.id, newMessage: newMessage })
     setMessages([...messages, newMessage])
     setInputValue('')
   }
 
   function handleInput(event) {
     setInputValue(event.target.value)
+    dispatch({ type: DispatchConst.ADD_MESSAGE, idOfUser: activeChat.id, newMessageText: event.target.value })
   }
 
   return (
@@ -69,7 +74,7 @@ export default function Dialogs(props) {
           width: '2px',
           backgroundColor: 'primary.main'
         }} />}>
-        <Tabs value={chatUser - 1} onChange={handleChange} orientation="vertical" scrollButtons="auto"
+        <Tabs value={chatUser === -1 ? 0 : chatUser - 1} onChange={handleChange} orientation="vertical" scrollButtons="auto"
           aria-label="basic tabs example">
           {chats.map((chat) => (
             <Tab key={chat.id}

@@ -1,3 +1,12 @@
+import dialogsReducer from "./dialogs-reducer"
+import profileReducer from "./profile-reducer"
+
+export const DispatchConst = {
+  ADD_POST: 'ADD_POST',
+  ADD_MESSAGE: 'ADD_MESSAGE',
+  NEW_MESSAGE_TEXT: 'NEW_MESSAGE_TEXT',
+}
+
 let store = {
   _state: {
     DialogsPage: {
@@ -32,7 +41,8 @@ let store = {
               timestamp: '2023-10-01T10:20:00Z',
               isMyMessage: true
             }
-          ]
+          ],
+          newMessageText: ''
         },
         {
           id: 2,
@@ -64,7 +74,8 @@ let store = {
               timestamp: '2023-10-01T11:25:00Z',
               isMyMessage: true
             }
-          ]
+          ],
+          newMessageText: ''
         },
         {
           id: 3,
@@ -101,7 +112,8 @@ let store = {
               timestamp: '2023-10-01T12:20:00Z',
               isMyMessage: true
             }
-          ]
+          ],
+          newMessageText: ''
         },
         {
           id: 4,
@@ -133,7 +145,8 @@ let store = {
               timestamp: '2023-10-01T13:20:00Z',
               isMyMessage: true
             }
-          ]
+          ],
+          newMessageText: ''
         },
         {
           id: 5,
@@ -160,7 +173,8 @@ let store = {
               timestamp: '2023-10-01T14:20:00Z',
               isMyMessage: true
             }
-          ]
+          ],
+          newMessageText: ''
         },
         {
           id: 6,
@@ -192,7 +206,8 @@ let store = {
               timestamp: '2023-10-01T15:20:00Z',
               isMyMessage: true
             }
-          ]
+          ],
+          newMessageText: ''
         },
         {
           id: 7,
@@ -224,7 +239,8 @@ let store = {
               timestamp: '2023-10-01T16:20:00Z',
               isMyMessage: true
             }
-          ]
+          ],
+          newMessageText: ''
         },
         {
           id: 8,
@@ -251,7 +267,8 @@ let store = {
               timestamp: '2023-10-01T17:20:00Z',
               isMyMessage: true
             }
-          ]
+          ],
+          newMessageText: ''
         },
         {
           id: 9,
@@ -283,7 +300,8 @@ let store = {
               timestamp: '2023-10-01T18:20:00Z',
               isMyMessage: true
             }
-          ]
+          ],
+          newMessageText: ''
         },
         {
           id: 10,
@@ -315,7 +333,8 @@ let store = {
               timestamp: '2023-10-01T19:20:00Z',
               isMyMessage: true
             }
-          ]
+          ],
+          newMessageText: ''
         }
       ]
     },
@@ -348,21 +367,9 @@ let store = {
   getState() {
     return this._state
   },
-  // addPost(newPost) {
-  //   this._state.ProfilePage.posts.push(newPost)
-  // },
-  // addMessage(idOfUser, newMessage) {
-  //   this._state.DialogsPage.chats[idOfUser].messages.push(newMessage)
-  // },
   dispatch(action) {
-    if (action.type === 'ADD-POST') {
-      this._state.ProfilePage.posts.push(action.newPost)
-      console.log("ADD-POST")
-    }
-    if (action.type === 'ADD-MESSAGE') {
-      this._state.DialogsPage.chats[action.idOfUser].messages.push(action.newMessage)
-      console.log("ADD-MESSAGE")
-    }
+    this._state.ProfilePage = profileReducer(this._state.ProfilePage, action)
+    this._state.DialogsPage = dialogsReducer(this._state.DialogsPage, action)
   }
 }
 

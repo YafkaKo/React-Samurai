@@ -1,11 +1,10 @@
 import React from 'react'
-import {Box, Stack, Typography} from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 
 function Messages(props) {
-    const {messages,nickname} = props
+    const { messages, nickname } = props
     return (
-        <Stack spacing={2} sx={{flexGrow: '1'}}>
-
+        <Stack spacing={2} sx={{ flexGrow: '1' }}>
             {messages.map((message) => (
                 <Box
                     key={message.id}
@@ -18,7 +17,7 @@ function Messages(props) {
                         maxWidth: "70%",
                     }}
                 >
-                    <Typography sx={{display: "block", textAlign: "left", fontWeight: "600", color: "primary.main"}}>
+                    <Typography sx={{ display: "block", textAlign: "left", fontWeight: "600", color: "primary.main" }}>
                         {message.isMyMessage ? "Me" : nickname}
                     </Typography>
                     <Typography>{message.text}</Typography>

@@ -5,7 +5,7 @@ import App from './App'
 import socialNetworkTheme from './SocialNetworkTheme'
 import { CssBaseline } from '@mui/material'
 import { ThemeProvider } from '@mui/material/styles'
-import store from './State'
+import store from './redux/State'
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'))

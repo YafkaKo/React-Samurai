@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import Post from './Post/Post'
 import SendIcon from '@mui/icons-material/Send'
 import { Box, Button, List, ListItem, TextareaAutosize, Typography } from '@mui/material'
+import { DispatchConst } from '../../../redux/State'
+
 
 
 const MyPosts = (props) => {
@@ -23,7 +25,7 @@ const MyPosts = (props) => {
       text: textareaRef.current.value,
       likes: likes,
     }
-    dispatch({ type: 'ADD-POST', newPost: newElement })
+    dispatch({ type: DispatchConst.ADD_POST, newPost: newElement })
     setPosts([...posts, newElement])
     textareaRef.current.value = ''
   }
