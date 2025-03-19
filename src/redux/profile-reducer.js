@@ -30,7 +30,6 @@ const profileReducer = (state = initialState, action) => {
   switch (action.type) {
 
     case DispatchConst.ADD_POST:
-      console.log({ posts: [...state.posts, action.newPost] })
       return {
         posts: [...state.posts, action.newPost],
       }

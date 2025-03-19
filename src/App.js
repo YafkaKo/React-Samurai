@@ -5,7 +5,7 @@ import { Route, Routes } from 'react-router-dom'
 import Header from './Components/Header/Header'
 import Sidebar from './Components/Sidebar/Sidebar'
 import Profile from './Components/Profile/Profile'
-import Dialogs from './Components/Dialogs/Dialogs'
+import DialogsContainer from './Components/Dialogs/DialogsContainer'
 
 function App() {
 
@@ -22,8 +22,8 @@ function App() {
         <Sidebar />
         <Routes>
           <Route path="/profile" element={<Profile />} />
-          <Route path="/dialogs" element={<Dialogs />} />
-          <Route path="/dialogs/:chatId" element={<Dialogs />} />
+          <Route path="/dialogs" element={<DialogsContainer />} />
+          <Route path="/dialogs/:chatId" element={<DialogsContainer />} />
           {/*<Route path="/news" element={<News/>}/>*/}
           {/*<Route path="/settings" element={<Settings/>}/>*/}
         </Routes>

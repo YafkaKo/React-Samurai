@@ -1,49 +1,15 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { Avatar, Box, Divider, Stack, Tab, Tabs, Typography } from '@mui/material'
-import { useNavigate, useParams } from 'react-router-dom'
-import MessagesActive from './MessagesActive/MessagesActive'
-import { useSelector } from 'react-redux'
+import MessagesActiveContainer from './MessagesActive/MessagesActiveContainer'
 
 
-export default function Dialogs() {
-  const chats = useSelector(state => state.dialogsPage.chats)
-
-  const navigate = useNavigate()
-  const { chatId } = useParams()
-  const [chatUser, setChatUser] = React.useState(chatId ? parseInt(chatId) : 0)
-
-  let activeChat = useRef(null)
-
-  if (typeof chatUser === 'number') {
-    activeChat = chats.find((chat) => chat.id === chatUser)
-  }
-
-  // useEffect(() => {
-  //   if (activeChat) {
-  //     setMessages(activeChat.messages)
-  //     setInputValue(activeChat.newMessageText)
-  //   }
-  // }, [activeChat])
-
-
-
-  // useEffect(() => {
-  //   if (textareaRef.current && activeChat) {
-  //     textareaRef.current.focus()
-  //   }
-  // }, [activeChat])
-
-  const handleChange = (event, chatUser) => {
-    ++chatUser
-    setChatUser(chatUser)
-    navigate(`/dialogs/${chatUser}`)
-  }
+export default function Dialogs(props) {
+  const { chatUser, handleChange, chats, activeChat } = props
 
   return (
     <Box sx={{
       width: '100%',
       padding: '15px',
-      // display: 'flex',
       flexDirection: 'column'
     }}>
       <Typography sx={{ fontWeight: 'bold' }} variant="h4" component="h4">Dialogs</Typography>
@@ -72,7 +38,7 @@ export default function Dialogs() {
         </Tabs>
         <Box sx={{ display: 'flex', flexGrow: 1, padding: '10px' }}>
           {activeChat ? (
-            <MessagesActive activeChat={activeChat}></MessagesActive>
+            <MessagesActiveContainer activeChat={activeChat}></MessagesActiveContainer>
 
           ) : (
             <Typography variant="h4" sx={{ textAlign: 'center' }}>Select a chat to start messaging</Typography>

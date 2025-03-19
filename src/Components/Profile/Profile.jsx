@@ -1,5 +1,5 @@
 import React from 'react'
-import MyPosts from './MyPosts/MyPosts'
+import MyPostsContainer from './MyPosts/MyPostsContainer'
 import { Avatar, Box, List, ListItem, Typography } from '@mui/material'
 
 const Profile = () => {
@@ -19,7 +19,7 @@ const Profile = () => {
                     </List>
                 </Box>
             </Box>
-            <MyPosts/>
+            <MyPostsContainer />
         </Box>
     );
 };

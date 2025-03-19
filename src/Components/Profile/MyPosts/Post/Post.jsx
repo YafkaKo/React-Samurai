@@ -9,23 +9,12 @@ import {
 } from "@mui/material";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 
-function Post({ user, avatar, text, likes }) {
+function Post(props) {
+    const { likeCount, handleLike, avatar, user, text } = props
 
-    
-    const [likeCount, setLikeCount] = React.useState(likes);
-    const likesInStart = likes;
-    const likesInEnd = likes+1;
 
-    const handleLike = () => {
-        if (likesInStart === likeCount) {
-            setLikeCount(likeCount + 1);
-        }
-        if (likesInEnd === likeCount) {
-            setLikeCount(likeCount - 1);
-        }
-    };
     return (
-        <Paper elevation={2} sx={{ padding: 2, width: "100%"}}>
+        <Paper elevation={2} sx={{ padding: 2, width: "100%" }}>
             <Stack direction="row" spacing={2} alignItems="center">
                 <Avatar>{avatar}</Avatar>
 
