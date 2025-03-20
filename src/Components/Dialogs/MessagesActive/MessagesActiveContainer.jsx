@@ -1,34 +1,33 @@
-import React from 'react'
+// import React from 'react'
 import MessagesActive from './MessagesActive'
-import { DispatchConst } from '../../../redux/store'
-import { useSelector, useDispatch } from 'react-redux'
+import { connect } from 'react-redux'
+import { addMessageActionCreator, newMessageTextActionCreator } from '../../../redux/dialogs-reducer'
 
 
-function MessagesActiveContainer(props) {
-    const { activeChat } = props
-    const messages = useSelector(state => state.dialogsPage.chats[activeChat.id - 1].messages)
-    const inputValue = useSelector(state => state.dialogsPage.chats[activeChat.id - 1].newMessageText)
-    const dispatch = useDispatch()
+const mapStateToProps = (state, props) => {
+    const { activeChat, count } = props
 
-
-    function handleMessage() {
-        let newMessage = {
-            id: messages.length + 1,
-            text: inputValue,
-            timestamp: new Date().toISOString(),
-            isMyMessage: true
-        }
-        dispatch({ type: DispatchConst.ADD_MESSAGE, idOfUser: activeChat.id, newMessage: newMessage })
+    return {
+        activeChat: activeChat,
+        messages: state.dialogsPage.chats[count].messages,
+        newMessageText: state.dialogsPage.chats[count].newMessageText
     }
-
-    function handleInput(event) {
-        dispatch({ type: DispatchConst.NEW_MESSAGE_TEXT, idOfUser: activeChat.id, newMessageText: event.target.value })
-    }
-
-    return (
-        <MessagesActive messages={messages} inputValue={inputValue} handleMessage={handleMessage} handleInput={handleInput} activeChat={activeChat} />
-
-    );
 }
+
+
+
+const mapDispatchesToProps = (dispatch) => {
+    return {
+        handleMessage: (idOfUser, newMessage) => {
+            dispatch(addMessageActionCreator(newMessage, idOfUser))
+        },
+        handleInput: (idOfUser, newMessageText) => {
+            dispatch(newMessageTextActionCreator(newMessageText, idOfUser))
+        }
+    }
+}
+
+
+const MessagesActiveContainer = connect(mapStateToProps, mapDispatchesToProps)(MessagesActive)
 
 export default MessagesActiveContainer;

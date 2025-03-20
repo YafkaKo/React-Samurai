@@ -1,12 +1,20 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import PostContainer from './Post/PostContainer'
 import SendIcon from '@mui/icons-material/Send'
 import { Box, Button, List, ListItem, TextareaAutosize, Typography } from '@mui/material'
 
 
 
+
 const MyPosts = (props) => {
-  const { textareaRef, handlePost, posts } = props
+  const { handlePost, posts } = props
+
+  const textareaRef = useRef()
+
+  useEffect(() => {
+    textareaRef.current.focus()
+  }, [])
+
   return (
     <Box>
       <Box sx={{ margin: '32px 0 32px 0', display: 'flex', flexDirection: 'column' }}>
@@ -20,19 +28,24 @@ const MyPosts = (props) => {
           />
         </Box>
         <Button sx={{ marginTop: '15px' }} variant="contained" endIcon={<SendIcon />}
-          onClick={() => handlePost('name', 0)}
+          onClick={() => {
+            let newElement =
+            {
+              id: posts.length + 1,
+              user: 'Ivan',
+              avatar: 'I',
+              text: textareaRef.current.value,
+              likes: 0,
+            }
+            handlePost(newElement)
+            textareaRef.current.value = ''
+          }}
         >Send...</Button>
       </Box>
       <List>
         {posts.map((post) => (
           <ListItem key={post.id} sx={{ p: 0, mb: '15px' }}>
-            <PostContainer
-              key={post.id}
-              user={post.user}
-              avatar={post.avatar}
-              text={post.text}
-              likes={post.likes}
-            />
+            <PostContainer id={post.id} />
           </ListItem>
         ))
         }

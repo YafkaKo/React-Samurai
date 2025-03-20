@@ -333,6 +333,7 @@ const initialState = {
 const dialogsReducer = (state = initialState, action) => {
   switch (action.type) {
     case DispatchConst.ADD_MESSAGE:
+      console.log('ADD_MESSAGE')
       return {
         ...state,
         chats: state.chats.map((chat) =>
@@ -346,6 +347,7 @@ const dialogsReducer = (state = initialState, action) => {
         ),
       };
     case DispatchConst.NEW_MESSAGE_TEXT:
+      console.log('NEW_MESSAGE_TEXT')
       return {
         ...state,
         chats: state.chats.map((chat) =>
@@ -361,5 +363,12 @@ const dialogsReducer = (state = initialState, action) => {
       return state;
   }
 }
+
+export const addMessageActionCreator = (newMessage, idOfUser) =>
+  ({ type: DispatchConst.ADD_MESSAGE, idOfUser: idOfUser, newMessage: newMessage })
+
+export const newMessageTextActionCreator = (newMessageText, idOfUser) =>
+  ({ type: DispatchConst.NEW_MESSAGE_TEXT, idOfUser: idOfUser, newMessageText: newMessageText })
+
 
 export default dialogsReducer

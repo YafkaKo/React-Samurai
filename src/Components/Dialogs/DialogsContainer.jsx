@@ -1,29 +1,14 @@
-import React, { useRef } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { connect } from 'react-redux'
 import Dialogs from './Dialogs'
 
 
-export default function DialogsContainer() {
-  const chats = useSelector(state => state.dialogsPage.chats)
 
-  const navigate = useNavigate()
-  const { chatId } = useParams()
-  const [chatUser, setChatUser] = React.useState(chatId ? parseInt(chatId) : 0)
 
-  let activeChat = useRef(null)
+const mapStateToProps = (state) => ({
+  chats: state.dialogsPage.chats,
+});
 
-  if (typeof chatUser === 'number') {
-    activeChat = chats.find((chat) => chat.id === chatUser)
-  }
 
-  const handleChange = (event, chatUser) => {
-    ++chatUser
-    setChatUser(chatUser)
-    navigate(`/dialogs/${chatUser}`)
-  }
+const DialogsContainer = connect(mapStateToProps, null)(Dialogs)
 
-  return (
-    <Dialogs chatUser={chatUser} handleChange={handleChange} chats={chats} activeChat={activeChat} />
-  )
-};
+export default DialogsContainer

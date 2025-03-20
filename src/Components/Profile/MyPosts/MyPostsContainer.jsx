@@ -1,36 +1,24 @@
-import React, { useEffect, useRef } from 'react'
-import { DispatchConst } from '../../../redux/store'
-import { useSelector, useDispatch } from 'react-redux';
 import MyPosts from './MyPosts'
+import { addPostActionCreator } from '../../../redux/profile-reducer'
+import { connect } from 'react-redux'
 
-
-
-const MyPostsContainer = () => {
-  const dispatch = useDispatch();
-  const posts = useSelector((state) => state.profilePage.posts)
-  const textareaRef = useRef()
-
-  useEffect(() => {
-    textareaRef.current.focus()
-  }, [])
-
-  function handlePost(name, likes) {
-    let newElement =
-    {
-      id: posts.length + 1,
-      user: name,
-      avatar: name.slice(0, 1).toUpperCase(),
-      text: textareaRef.current.value,
-      likes: likes,
-    }
-    dispatch({ type: DispatchConst.ADD_POST, newPost: newElement })
-    textareaRef.current.value = ''
+const mapStateToProps = (state) => {
+  return {
+    posts: state.profilePage.posts,
   }
-
-  return (
-    <MyPosts textareaRef={textareaRef} handlePost={handlePost} posts={posts} />
-  )
 }
+
+
+
+const mapDispatchesToProps = (dispatch) => {
+  return {
+    handlePost: (newPost) => {
+      dispatch(addPostActionCreator(newPost))
+    },
+  }
+}
+
+const MyPostsContainer = connect(mapStateToProps, mapDispatchesToProps)(MyPosts)
 
 
 export default MyPostsContainer

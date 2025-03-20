@@ -5,6 +5,7 @@ export const DispatchConst = {
   ADD_POST: 'ADD_POST',
   ADD_MESSAGE: 'ADD_MESSAGE',
   NEW_MESSAGE_TEXT: 'NEW_MESSAGE_TEXT',
+  SET_LIKE_COUNT: 'SET_LIKE_COUNT',
 }
 
 let store = {

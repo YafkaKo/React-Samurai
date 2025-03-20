@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Avatar,
     Typography,
@@ -10,7 +10,8 @@ import {
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 
 function Post(props) {
-    const { likeCount, handleLike, avatar, user, text } = props
+    const { handleLike, avatar, user, likes, text, id } = props
+    const [handleLikeBool, setHandleLikeBool] = useState(false)
 
 
     return (
@@ -26,10 +27,20 @@ function Post(props) {
                 </Box>
 
                 <Stack direction="row" alignItems="center" spacing={1}>
-                    <IconButton size="small" onClick={handleLike}>
+                    <IconButton size="small" onClick={() => {
+                        if (handleLikeBool === false) {
+                            console.log("Increment")
+                            handleLike(id, likes + 1)
+                            setHandleLikeBool(!handleLikeBool)
+                        } if (handleLikeBool === true) {
+                            console.log("Decrement")
+                            handleLike(id, likes - 1)
+                            setHandleLikeBool(!handleLikeBool)
+                        }
+                    }}>
                         <ThumbUpIcon fontSize="small" />
                     </IconButton>
-                    <Typography variant="body2">{likeCount}</Typography>
+                    <Typography variant="body2">{likes}</Typography>
                 </Stack>
             </Stack>
         </Paper>

@@ -1,10 +1,27 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { Avatar, Box, Divider, Stack, Tab, Tabs, Typography } from '@mui/material'
 import MessagesActiveContainer from './MessagesActive/MessagesActiveContainer'
+import { useNavigate, useParams } from 'react-router-dom'
 
 
 export default function Dialogs(props) {
-  const { chatUser, handleChange, chats, activeChat } = props
+  const { chats } = props
+
+  const navigate = useNavigate()
+  const { chatId } = useParams()
+  const [chatUser, setChatUser] = React.useState(chatId ? parseInt(chatId) : 0)
+
+  let activeChat = useRef(null)
+
+  if (typeof chatUser === 'number') {
+    activeChat = chats.find((chat) => chat.id === chatUser)
+  }
+
+  const handleChange = (event, chatUser) => {
+    ++chatUser
+    setChatUser(chatUser)
+    navigate(`/dialogs/${chatUser}`)
+  }
 
   return (
     <Box sx={{
@@ -38,7 +55,7 @@ export default function Dialogs(props) {
         </Tabs>
         <Box sx={{ display: 'flex', flexGrow: 1, padding: '10px' }}>
           {activeChat ? (
-            <MessagesActiveContainer activeChat={activeChat}></MessagesActiveContainer>
+            <MessagesActiveContainer activeChat={activeChat} count={activeChat.id - 1}></MessagesActiveContainer>
 
           ) : (
             <Typography variant="h4" sx={{ textAlign: 'center' }}>Select a chat to start messaging</Typography>

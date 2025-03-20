@@ -33,10 +33,29 @@ const profileReducer = (state = initialState, action) => {
       return {
         posts: [...state.posts, action.newPost],
       }
+    case DispatchConst.SET_LIKE_COUNT:
+
+      return {
+        posts: state.posts.map((post) =>
+          post.id === action.idOfPost
+            ? {
+              ...post,
+              likes: action.newLikesCount
+            }
+            : post
+        )
+
+      }
 
     default:
       return state
   }
 }
+
+export const addPostActionCreator = (newPost) =>
+  ({ type: DispatchConst.ADD_POST, newPost: newPost })
+
+export const setLikesCountActionCreator = (idOfPost, newLikesCount) =>
+  ({ type: DispatchConst.SET_LIKE_COUNT, idOfPost: idOfPost, newLikesCount: newLikesCount })
 
 export default profileReducer
