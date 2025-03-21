@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import Users from './Users'
-import { setFollowActionCreator } from '../../redux/users-reducer';
+import { setFollowActionCreator, setUsersAC } from '../../redux/users-reducer';
 
 function mapStateToProps(state) {
   return {
@@ -13,6 +13,9 @@ const mapDispatchesToProps = (dispatch) => {
     handleFollow: (idOfPost, newFollow) => {
       dispatch(setFollowActionCreator(newFollow, idOfPost))
     },
+    handleUsers: (newState) =>{
+      dispatch(setUsersAC(newState))
+    }
   }
 }
 
