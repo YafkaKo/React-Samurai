@@ -1,11 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Box, Stack, Typography, IconButton, Input } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
 
 
 function MessagesActive(props) {
-    const { messages, inputValue, handleMessage, handleInput, activeChat } = props
-    const [inputValueBase, SetInputValue] = useState(inputValue)
+    const { messages, newMessageText, handleMessage, handleInput, activeChat } = props
 
     return (
         <Stack direction="column" sx={{ flexGrow: '1' }}>
@@ -31,19 +30,19 @@ function MessagesActive(props) {
             </Stack>
             <Stack direction="row" spacing={2}>
                 <Input onChange={(e) => {
-                    SetInputValue(e.target.value)
-                    handleInput(activeChat.id, inputValueBase)
+                    handleInput(activeChat.id, e.target.value)
                 }
                 }
-                    multiline placeholder="Send a message..." fullWidth />
+                    multiline placeholder="Send a message..." fullWidth value={newMessageText} />
                 <IconButton onClick={() => {
                     let newMessage = {
                         id: messages.length + 1,
-                        text: inputValueBase,
+                        text: newMessageText,
                         timestamp: new Date().toISOString(),
                         isMyMessage: true
                     }
                     handleMessage(activeChat.id, newMessage)
+                    // SetInputValue('')
                     handleInput(activeChat.id, '')
                 }
                 } sx={{

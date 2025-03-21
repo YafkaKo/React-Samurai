@@ -6,6 +6,7 @@ import Header from './Components/Header/Header'
 import Sidebar from './Components/Sidebar/Sidebar'
 import Profile from './Components/Profile/Profile'
 import DialogsContainer from './Components/Dialogs/DialogsContainer'
+import UsersContainer from './Components/Users/UsersContainer'
 
 function App() {
 
@@ -24,7 +25,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/dialogs" element={<DialogsContainer />} />
           <Route path="/dialogs/:chatId" element={<DialogsContainer />} />
-          {/*<Route path="/news" element={<News/>}/>*/}
+          <Route path="/users" element={<UsersContainer />} />
           {/*<Route path="/settings" element={<Settings/>}/>*/}
         </Routes>
       </Box>

@@ -341,7 +341,6 @@ const dialogsReducer = (state = initialState, action) => {
             ? {
               ...chat,
               messages: [...chat.messages, action.newMessage], // Добавляем новое сообщение
-              newMessageText: '', // Очищаем поле ввода
             }
             : chat
         ),
