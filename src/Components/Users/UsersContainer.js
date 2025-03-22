@@ -1,10 +1,14 @@
 import { connect } from 'react-redux';
 import Users from './Users'
-import { setFollowActionCreator, setUsersAC } from '../../redux/users-reducer';
+import { setCurrentPage, setFollowActionCreator, setPagintationAC, setUsersAC } from '../../redux/users-reducer';
 
 function mapStateToProps(state) {
   return {
-    users: state.usersPage.users
+    users: state.usersPage.users,
+    paginationSize: state.usersPage.paginationSize,
+    totalCount: state.usersPage.totalCount,
+    usersPerPage: state.usersPage.paginationSize, // Количество пользователей на странице
+    currentPage: state.usersPage.currentPage
   };
 }
 
@@ -15,6 +19,12 @@ const mapDispatchesToProps = (dispatch) => {
     },
     handleUsers: (newState) => {
       dispatch(setUsersAC(newState))
+    },
+    handlePagination: (paginationSize,totalCount)=>{
+      dispatch(setPagintationAC(paginationSize,totalCount))
+    },
+    handleCurrentPage: (currentPage)=>{
+      dispatch(setCurrentPage(currentPage))
     }
   }
 }

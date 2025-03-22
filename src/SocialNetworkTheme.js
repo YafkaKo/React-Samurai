@@ -1,4 +1,4 @@
-import {createTheme} from '@mui/material/styles'
+import { createTheme } from '@mui/material/styles';
 
 const socialNetworkTheme = createTheme({
   palette: {
@@ -141,7 +141,36 @@ const socialNetworkTheme = createTheme({
         },
       },
     },
+    // Стили для пагинации
+    MuiPagination: {
+      styleOverrides: {
+        root: {
+          display: 'flex',
+          justifyContent: 'center',
+          marginTop: '20px',
+        },
+      },
+    },
+    MuiPaginationItem: {
+      styleOverrides: {
+        root: {
+          color: '#FFF', // Серый цвет текста
+          fontSize: '1rem',
+          fontWeight: 500,
+          '&.Mui-selected': {
+            backgroundColor: '#FF5722', // Оранжевый фон для выбранной страницы
+            color: '#FFFFFF', // Белый текст для выбранной страницы
+            '&:hover': {
+              backgroundColor: '#E64A19', // Темнее оранжевый при наведении
+            },
+          },
+          '&:hover': {
+            backgroundColor: 'rgba(255, 87, 34, 0.08)', // Легкий оранжевый фон при наведении
+          },
+        },
+      },
+    },
   },
-})
+});
 
-export default socialNetworkTheme
+export default socialNetworkTheme;

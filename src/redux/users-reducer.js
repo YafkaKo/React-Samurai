@@ -3,6 +3,9 @@ import { DispatchConst } from './store'
 const initialState = {
   users: [
   ],
+  paginationSize: 3,
+  currentPage: 1
+
 };
 
 const usersReducer = (state = initialState, action) => {
@@ -21,10 +24,22 @@ const usersReducer = (state = initialState, action) => {
       }
 
     case DispatchConst.SET_USERS:
-      console.log(action.newState)
       return {
         ...state,
         users: [...action.newState]
+      }
+
+    case DispatchConst.SET_PAGINATION:
+      return {
+        ...state,
+        paginationSize: action.paginationSize,
+        totalCount: action.totalCount
+      }
+
+    case DispatchConst.SET_CURRENT_PAGE:
+      return {
+        ...state,
+        currentPage: action.currentPage
       }
 
     default:
@@ -37,6 +52,12 @@ export const setFollowActionCreator = (newFollow, idOfUser) =>
 
 export const setUsersAC = (newState) =>
   ({ type: DispatchConst.SET_USERS, newState })
+
+export const setPagintationAC = (paginationSize,totalCount) =>
+  ({ type: DispatchConst.SET_PAGINATION, paginationSize,totalCount })
+
+export const setCurrentPage = (currentPage) =>
+  ({ type: DispatchConst.SET_CURRENT_PAGE, currentPage })
 
 
 export default usersReducer
