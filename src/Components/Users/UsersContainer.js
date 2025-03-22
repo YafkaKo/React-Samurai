@@ -13,7 +13,7 @@ const mapDispatchesToProps = (dispatch) => {
     handleFollow: (idOfPost, newFollow) => {
       dispatch(setFollowActionCreator(newFollow, idOfPost))
     },
-    handleUsers: (newState) =>{
+    handleUsers: (newState) => {
       dispatch(setUsersAC(newState))
     }
   }

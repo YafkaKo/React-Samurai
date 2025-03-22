@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, List} from "@mui/material";
+import { Box, List } from "@mui/material";
 import CustomNavLink from "./CustomNavLink/CustomNavLink";
 
 const links = [
@@ -23,24 +23,30 @@ const links = [
         name: "Settings",
         link: "/settings",
     },
+    {
+        id: 5,
+        name: "Users",
+        link: "/users",
+    },
 ];
 
 const Sidebar = () => {
     return (
-            <Box component='nav' sx={{p: '15px',
-                borderRight: "2px solid",
-                borderColor: "background.default"
-            }}>
-                <List sx={{p: 0}}>
-                    {
-                        links.map(link => {
-                            return (
-                                <CustomNavLink key={link.id} to={link.link} text={link.name}/>
-                            )
-                        })
-                    }
-                </List>
-            </Box>
+        <Box component='nav' sx={{
+            p: '15px',
+            borderRight: "2px solid",
+            borderColor: "background.default"
+        }}>
+            <List sx={{ p: 0 }}>
+                {
+                    links.map(link => {
+                        return (
+                            <CustomNavLink key={link.id} to={link.link} text={link.name} />
+                        )
+                    })
+                }
+            </List>
+        </Box>
     );
 };
 
