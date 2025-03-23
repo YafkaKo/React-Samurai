@@ -54,19 +54,19 @@ const usersReducer = (state = initialState, action) => {
   }
 }
 
-export const setFollowActionCreator = (newFollow, idOfUser) =>
+export const handleFollow = (newFollow, idOfUser) =>
   ({ type: DispatchConst.SET_FOLLOW_USER, newFollow, idOfUser })
 
-export const setUsersAC = (newState) =>
+export const handleUsers = (newState) =>
   ({ type: DispatchConst.SET_USERS, newState })
 
-export const setPagintationAC = (paginationSize,totalCount) =>
+export const handlePagination = (paginationSize,totalCount) =>
   ({ type: DispatchConst.SET_PAGINATION, paginationSize,totalCount })
 
-export const setCurrentPage = (currentPage) =>
+export const handleCurrentPage = (currentPage) =>
   ({ type: DispatchConst.SET_CURRENT_PAGE, currentPage })
 
-export const setFetchingAC = (isFetching) =>
+export const handleFetching = (isFetching) =>
   ({ type: DispatchConst.SET_FETCHING, isFetching })
 
 

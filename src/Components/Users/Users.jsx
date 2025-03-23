@@ -33,7 +33,7 @@ const Users = (props) => {
                 <Button
                   sx={{ padding: "10px", width: "100%", lineHeight: "1" }}
                   variant="contained"
-                  onClick={() => handleFollow(user.id, !user.follow)}
+                  onClick={() =>handleFollow(!user.follow , user.id )}
                 >
                   {user.follow ? 'UNFOLLOW' : 'FOLLOW'}
                 </Button>

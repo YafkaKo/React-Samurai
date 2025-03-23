@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { setCurrentPage, setFetchingAC, setFollowActionCreator, setPagintationAC, setUsersAC } from '../../redux/users-reducer';
+import { handleCurrentPage, handleFetching, handleFollow, handlePagination, handleUsers } from '../../redux/users-reducer';
 import axios from 'axios';
 import Users from './Users';
 
@@ -52,24 +52,12 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchesToProps = (dispatch) => {
-  return {
-    handleFollow: (idOfPost, newFollow) => {
-      dispatch(setFollowActionCreator(newFollow, idOfPost))
-    },
-    handleUsers: (newState) => {
-      dispatch(setUsersAC(newState))
-    },
-    handlePagination: (paginationSize,totalCount)=>{
-      dispatch(setPagintationAC(paginationSize,totalCount))
-    },
-    handleCurrentPage: (currentPage)=>{
-      dispatch(setCurrentPage(currentPage))
-    },
-    handleFetching: (isFetching) =>{
-      dispatch(setFetchingAC(isFetching))
-    }
-  }
+const mapDispatchesToProps = {
+    handleFollow,
+    handleUsers,
+    handlePagination,
+    handleCurrentPage,
+    handleFetching
 }
 
 export default connect(
