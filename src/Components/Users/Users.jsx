@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from "react-router";
 import { Avatar, Box, Button, CircularProgress, List, ListItem, ListItemAvatar, Pagination, Paper, Typography } from '@mui/material';
 
 
@@ -27,9 +28,11 @@ const Users = (props) => {
           <Paper key={user.id} elevation={2} sx={{ width: "100%", borderRadius: "16px", marginBottom: "15px" }}>
             <ListItem sx={{ justifyContent: "space-between", alignItems: 'unset', gap: "10px" }}>
               <Box sx={{ display: "flex", alignItems: "center", flexDirection: "column", width: "100px", gap: '10px' }}>
+              <NavLink to={`/profile/${user.id}`} style={{textDecoration: "none", color: "inherit",}}>
                 <ListItemAvatar sx={{ width: "54px", height: '54px', minWidth: "auto" }}>
                   <Avatar sx={{width: '100%', height: '100%'}} src={user.photos.small}></Avatar>
                 </ListItemAvatar>
+                </NavLink>
                 <Button
                   sx={{ padding: "10px", width: "100%", lineHeight: "1" }}
                   variant="contained"

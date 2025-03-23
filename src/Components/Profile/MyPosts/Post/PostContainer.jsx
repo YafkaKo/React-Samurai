@@ -1,5 +1,5 @@
 import Post from './Post'
-import { setLikesCountActionCreator } from '../../../../redux/profile-reducer';
+import { handleLikesCount } from '../../../../redux/profile-reducer';
 import { connect } from 'react-redux';
 
 // function PostContainer({ user, avatar, text, likes }) {
@@ -38,7 +38,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchesToProps = (dispatch) => {
     return {
         handleLike: (idOfPost, newLikesCount) => {
-            dispatch(setLikesCountActionCreator(idOfPost, newLikesCount))
+            dispatch(handleLikesCount(idOfPost, newLikesCount))
         },
     }
 }
