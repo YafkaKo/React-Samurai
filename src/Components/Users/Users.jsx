@@ -1,10 +1,10 @@
 import React from 'react';
-import { Avatar, Box, Button, List, ListItem, ListItemAvatar, Pagination, Paper, Typography } from '@mui/material';
+import { Avatar, Box, Button, CircularProgress, List, ListItem, ListItemAvatar, Pagination, Paper, Typography } from '@mui/material';
 
 
 const Users = (props) => {
 
-  const { handleFollow, users, usersPerPage, handleCurrentPage, currentPage, totalCount } = props;
+  const { handleFollow, users, usersPerPage, handleCurrentPage, currentPage, totalCount, isFetching } = props;
 
     const totalPages = Math.ceil(totalCount / usersPerPage);
 
@@ -22,13 +22,13 @@ const Users = (props) => {
       />
 
       {/* Список пользователей */}
-      <List sx={{ width: "100%", boxSizing: 'border-box' }}>
-        {users.map((user) => (
+      <List  sx={{ width: "100%", boxSizing: 'border-box', display: 'flex', flexDirection: 'column' }}>
+        {isFetching ? <CircularProgress size={100} sx={{margin: ' 0 auto'}} /> : users.map((user) => (
           <Paper key={user.id} elevation={2} sx={{ width: "100%", borderRadius: "16px", marginBottom: "15px" }}>
             <ListItem sx={{ justifyContent: "space-between", alignItems: 'unset', gap: "10px" }}>
               <Box sx={{ display: "flex", alignItems: "center", flexDirection: "column", width: "100px", gap: '10px' }}>
-                <ListItemAvatar sx={{ width: "40px", minWidth: "auto" }}>
-                  <Avatar src={user.photos.small}></Avatar>
+                <ListItemAvatar sx={{ width: "54px", height: '54px', minWidth: "auto" }}>
+                  <Avatar sx={{width: '100%', height: '100%'}} src={user.photos.small}></Avatar>
                 </ListItemAvatar>
                 <Button
                   sx={{ padding: "10px", width: "100%", lineHeight: "1" }}
@@ -51,6 +51,7 @@ const Users = (props) => {
             </ListItem>
           </Paper>
         ))}
+
       </List>
     </Box>
     );

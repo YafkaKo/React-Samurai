@@ -4,7 +4,8 @@ const initialState = {
   users: [
   ],
   paginationSize: 6,
-  currentPage: 1
+  currentPage: 1,
+  isFetching: false
 
 };
 
@@ -42,6 +43,12 @@ const usersReducer = (state = initialState, action) => {
         currentPage: action.currentPage
       }
 
+    case DispatchConst.SET_FETCHING:
+      return {
+        ...state,
+        isFetching: action.isFetching
+      }
+
     default:
       return state
   }
@@ -58,6 +65,9 @@ export const setPagintationAC = (paginationSize,totalCount) =>
 
 export const setCurrentPage = (currentPage) =>
   ({ type: DispatchConst.SET_CURRENT_PAGE, currentPage })
+
+export const setFetchingAC = (isFetching) =>
+  ({ type: DispatchConst.SET_FETCHING, isFetching })
 
 
 export default usersReducer
