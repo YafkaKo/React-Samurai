@@ -3,7 +3,7 @@ import { DispatchConst } from './store'
 const initialState = {
   users: [
   ],
-  paginationSize: 3,
+  paginationSize: 6,
   currentPage: 1
 
 };
