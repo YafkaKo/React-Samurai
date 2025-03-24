@@ -10,7 +10,7 @@ class UsersContainer extends React.Component {
 
     this.props.handleFetching(true)
     // Загрузка пользователей с учетом пагинации
-    axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${currentPage}&count=${usersPerPage}`,{withCredentials:true}).then(response => {
+    axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${currentPage}&count=${usersPerPage}`).then(response => {
       this.props.handleFetching(false)
       this.props.handleUsers(response.data.items);
       this.props.handlePagination(usersPerPage, response.data.totalCount); // Передаем общее количество пользователей
@@ -24,7 +24,7 @@ class UsersContainer extends React.Component {
     // Если изменилась текущая страница или количество пользователей на странице, загружаем новых пользователей
     if (prevProps.currentPage !== currentPage) {
       this.props.handleFetching(true)
-      axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${currentPage}&count=${usersPerPage}`,{withCredentials:true}).then(response => {
+      axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${currentPage}&count=${usersPerPage}`).then(response => {
         this.props.handleFetching(false)
         this.props.handleUsers(response.data.items);
       });

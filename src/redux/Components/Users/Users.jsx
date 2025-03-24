@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavLink } from "react-router";
 import { Avatar, Box, Button, CircularProgress, List, ListItem, ListItemAvatar, Pagination, Paper, Typography } from '@mui/material';
-import axios from 'axios';
 
 
 const Users = (props) => {
@@ -37,28 +36,7 @@ const Users = (props) => {
                 <Button
                   sx={{ padding: "10px", width: "100%", lineHeight: "1" }}
                   variant="contained"
-                  onClick={() =>{
-                    if(!user.follow===false){
-                      console.log('post - follow')
-                      axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${user.id}`,{},{
-                        withCredentials:true,
-                        headers: {"API-KEY": "f3d2ecb6-57f4-4c9d-bbec-e9bd92eacaba"}
-                      })
-                      .then(response=>{if(response.data.resultCode===1
-                      ){
-                      handleFollow(!user.follow , user.id )}
-                      })
-                    } else{
-                      console.log('delete - unfollow')
-                      axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${user.id}`,{withCredentials:true,
-                        headers: {"API-KEY": "f3d2ecb6-57f4-4c9d-bbec-e9bd92eacaba"}})
-
-                      .then(response=>{if(response.data.resultCode===1){
-
-                        handleFollow(!user.follow , user.id )}
-                        })
-                    }
-                  }}
+                  onClick={() =>handleFollow(!user.follow , user.id )}
                 >
                   {user.follow ? 'UNFOLLOW' : 'FOLLOW'}
                 </Button>
