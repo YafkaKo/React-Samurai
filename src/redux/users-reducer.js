@@ -5,8 +5,8 @@ const initialState = {
   ],
   paginationSize: 6,
   currentPage: 1,
-  isFetching: false
-
+  isFetching: false,
+  FollowingIsProgress: []
 };
 
 const usersReducer = (state = initialState, action) => {
@@ -18,7 +18,7 @@ const usersReducer = (state = initialState, action) => {
           user.id === action.idOfUser
             ? {
               ...user,
-              follow: action.newFollow
+              followed: action.newFollow
             }
             : user
         )
@@ -48,6 +48,14 @@ const usersReducer = (state = initialState, action) => {
         ...state,
         isFetching: action.isFetching
       }
+    case DispatchConst.SET_FOLLOWING_PROGRESS:
+
+      return {
+        ...state,
+        FollowingIsProgress: action.isFetching ?
+[...state.FollowingIsProgress, action.userId]
+        : state.FollowingIsProgress.filter(id=> id !== action.userId)
+      }
 
     default:
       return state
@@ -68,6 +76,9 @@ export const handleCurrentPage = (currentPage) =>
 
 export const handleFetching = (isFetching) =>
   ({ type: DispatchConst.SET_FETCHING, isFetching })
+
+export const handleFollowingProgress = (isFetching,userId) =>
+  ({ type: DispatchConst.SET_FOLLOWING_PROGRESS,isFetching, userId })
 
 
 export default usersReducer

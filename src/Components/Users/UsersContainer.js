@@ -1,19 +1,18 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { handleCurrentPage, handleFetching, handleFollow, handlePagination, handleUsers } from '../../redux/users-reducer';
-import axios from 'axios';
+import { handleCurrentPage, handleFetching, handleFollow, handleFollowingProgress, handlePagination, handleUsers } from '../../redux/users-reducer';
 import Users from './Users';
+import UsersAPI from '../../API/API';
 
 class UsersContainer extends React.Component {
   componentDidMount() {
     const { currentPage, usersPerPage } = this.props;
 
     this.props.handleFetching(true)
-    // Загрузка пользователей с учетом пагинации
-    axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${currentPage}&count=${usersPerPage}`,{withCredentials:true}).then(response => {
+    UsersAPI.getUsersAPI(currentPage,usersPerPage).then(response => {
       this.props.handleFetching(false)
-      this.props.handleUsers(response.data.items);
-      this.props.handlePagination(usersPerPage, response.data.totalCount); // Передаем общее количество пользователей
+      this.props.handleUsers(response.items);
+      this.props.handlePagination(usersPerPage, response.totalCount); // Передаем общее количество пользователей
     });
   }
 
@@ -24,18 +23,18 @@ class UsersContainer extends React.Component {
     // Если изменилась текущая страница или количество пользователей на странице, загружаем новых пользователей
     if (prevProps.currentPage !== currentPage) {
       this.props.handleFetching(true)
-      axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${currentPage}&count=${usersPerPage}`,{withCredentials:true}).then(response => {
+      UsersAPI.getUsersAPI(currentPage,usersPerPage).then(response => {
         this.props.handleFetching(false)
-        this.props.handleUsers(response.data.items);
+        this.props.handleUsers(response.items);
       });
     }
   }
 
   render() {
-    const { handleFollow, users, usersPerPage, handleCurrentPage, currentPage, totalCount, isFetching } = this.props;
+    const { handleFollow, users, usersPerPage, handleCurrentPage, currentPage, totalCount, isFetching, handleFollowingProgress,FollowingIsProgress } = this.props;
 
     return (
-      <Users handleFollow={handleFollow} users={users} usersPerPage={usersPerPage} handleCurrentPage={handleCurrentPage} currentPage={currentPage} totalCount={totalCount} isFetching = {isFetching}/>
+      <Users handleFollow={handleFollow} users={users} usersPerPage={usersPerPage} handleCurrentPage={handleCurrentPage} currentPage={currentPage} totalCount={totalCount} isFetching = {isFetching} handleFollowingProgress={handleFollowingProgress} FollowingIsProgress={FollowingIsProgress}/>
 
     );
   }
@@ -46,9 +45,10 @@ function mapStateToProps(state) {
     users: state.usersPage.users,
     paginationSize: state.usersPage.paginationSize,
     totalCount: state.usersPage.totalCount,
-    usersPerPage: state.usersPage.paginationSize, // Количество пользователей на странице
+    usersPerPage: state.usersPage.paginationSize,
     currentPage: state.usersPage.currentPage,
-    isFetching: state.usersPage.isFetching
+    isFetching: state.usersPage.isFetching,
+    FollowingIsProgress: state.usersPage.FollowingIsProgress,
   };
 }
 
@@ -57,7 +57,8 @@ const mapDispatchesToProps = {
     handleUsers,
     handlePagination,
     handleCurrentPage,
-    handleFetching
+    handleFetching,
+    handleFollowingProgress
 }
 
 export default connect(

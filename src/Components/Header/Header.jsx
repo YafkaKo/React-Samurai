@@ -9,13 +9,11 @@ import {handleAuth} from '../../redux/auth-reducer'
 
 
 const Header = (props) => {
-    console.log(props)
     const {isAuth,login,handleAuth} = props
     useEffect(()=>{
         axios.get(`https://social-network.samuraijs.com/api/1.0/auth/me`,{withCredentials:true})
         .then(response=>{
 
-            console.log(response.data)
             if(response.data.resultCode===0){
                 const {id,login,email} =  response.data.data
                 handleAuth(id,login,email)
