@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import Dialogs from './Dialogs'
 import authRedirect from '../../HOC/AuthRedirect';
+import { compose } from 'redux';
 
 
 
@@ -8,8 +9,8 @@ const mapStateToProps = (state) => ({
   chats: state.dialogsPage.chats
 });
 
-const AuthRedirectComponent = authRedirect(Dialogs)
 
-const DialogsContainer = connect(mapStateToProps, null)(AuthRedirectComponent)
-
-export default DialogsContainer
+export default compose(
+  authRedirect,
+  connect(mapStateToProps, null)
+)(Dialogs)

@@ -5,6 +5,7 @@ import { Avatar, Box, List, ListItem, Typography, CircularProgress } from '@mui/
 import { getProfileThunkCreator, handleFetching, handleProfile } from '../../redux/profile-reducer';
 import MyPostsContainer from './MyPosts/MyPostsContainer';
 import authRedirect from '../../HOC/AuthRedirect';
+import { compose } from 'redux';
 
 const ProfileContainer = ({ profile, isFetching, handleFetching, handleProfile }) => {
   const { id } = useParams(); // Получаем id из URL
@@ -21,8 +22,6 @@ const ProfileContainer = ({ profile, isFetching, handleFetching, handleProfile }
       </Box>
     );
   }
-
-  <AuthRedirectComponent/>
 
   if (!profile) {
     return <div>Profile not found</div>;
@@ -59,8 +58,6 @@ const ProfileContainer = ({ profile, isFetching, handleFetching, handleProfile }
   );
 };
 
-const AuthRedirectComponent = authRedirect(ProfileContainer)
-
 const mapStateToProps = (state) => ({
   profile: state.profilePage.profile,
   isFetching: state.profilePage.isFetching
@@ -71,5 +68,7 @@ const mapDispatchToProps = {
   handleProfile,
 };
 
-const Profile = connect(mapStateToProps, mapDispatchToProps)(AuthRedirectComponent);
-export default Profile
+export default compose(
+  authRedirect,
+  connect(mapStateToProps, mapDispatchToProps)
+)(ProfileContainer)
