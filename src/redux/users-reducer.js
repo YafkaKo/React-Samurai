@@ -1,4 +1,6 @@
 import { DispatchConst } from './store'
+import UsersAPI from '../API/API';
+
 
 const initialState = {
   users: [
@@ -49,7 +51,6 @@ const usersReducer = (state = initialState, action) => {
         isFetching: action.isFetching
       }
     case DispatchConst.SET_FOLLOWING_PROGRESS:
-
       return {
         ...state,
         FollowingIsProgress: action.isFetching ?
@@ -80,5 +81,34 @@ export const handleFetching = (isFetching) =>
 export const handleFollowingProgress = (isFetching,userId) =>
   ({ type: DispatchConst.SET_FOLLOWING_PROGRESS,isFetching, userId })
 
+
+export const getUsersThunkCreator = (currentPage,usersPerPage)=> {
+  return (dispatch)=>{
+  dispatch(handleFetching(true))
+    UsersAPI.getUsersAPI({currentPage,usersPerPage}).then(response => {
+      dispatch(handleFetching(false))
+      dispatch(handleUsers(response.items));
+      dispatch(handlePagination(usersPerPage, response.totalCount)); // Передаем общее количество пользователей
+    });
+}
+}
+
+export const followUsersThunkCreator = (id, followed) => {
+  return async (dispatch) => {
+    dispatch(handleFollowingProgress(true, id));
+    try {
+      const apiMethod = followed ? UsersAPI.unFollowUsersAPI : UsersAPI.followUsersAPI;
+      const response = await apiMethod(id)
+
+      if (response.resultCode === 0) {
+        dispatch(handleFollow(!followed, id));
+      }
+    } catch (error) {
+      console.error('Error following user:', error);
+    } finally {
+      dispatch(handleFollowingProgress(false, id));
+    }
+  };
+};
 
 export default usersReducer

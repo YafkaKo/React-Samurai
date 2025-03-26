@@ -1,12 +1,15 @@
 import React from 'react';
 import { NavLink } from "react-router";
 import { Avatar, Box, Button, CircularProgress, List, ListItem, ListItemAvatar, Pagination, Paper, Typography } from '@mui/material';
-import usersAPI from '../../API/API';
+import { followUsersThunkCreator } from '../../redux/users-reducer';
+import { useDispatch } from 'react-redux';
 
 
 const Users = (props) => {
 
-  const { handleFollow, users, usersPerPage, handleCurrentPage, currentPage, totalCount, isFetching,handleFollowingProgress,FollowingIsProgress } = props;
+  const { users, usersPerPage, handleCurrentPage, currentPage, totalCount, isFetching,FollowingIsProgress } = props;
+
+  const dispatch = useDispatch()
 
     const totalPages = Math.ceil(totalCount / usersPerPage);
 
@@ -37,27 +40,8 @@ const Users = (props) => {
                   disabled={FollowingIsProgress.some(id=> id === user.id)}
                   sx={{ padding: "10px", width: "100%", lineHeight: "1" }}
                   variant="contained"
-                  onClick={() =>{
-                    handleFollowingProgress(true,user.id)
-                    if(user.followed===false){
-                      usersAPI.followUsersAPI(user.id)
-                      .then(response=>{
-                        if(response.resultCode===0
-                      ){
-                      handleFollow(!user.followed , user.id )
-                      handleFollowingProgress(false,user.id)
-                      }
-                      })
-                    } if(user.followed===true){
-                      usersAPI.unFollowUsersAPI(user.id)
-                      .then(response=>{
-                        if(response.resultCode===0){
-                        handleFollow(!user.followed , user.id )}
-                        handleFollowingProgress(false,user.id)
-                        })
-                    }
-                  }}
-                >
+                  onClick={()=>dispatch(followUsersThunkCreator(user.id,user.followed))}
+                                 >
                   {user.followed ? 'UNFOLLOW' : 'FOLLOW'}
                 </Button>
               </Box>

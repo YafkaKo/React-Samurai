@@ -4,8 +4,9 @@ import MessagesActiveContainer from './MessagesActive/MessagesActiveContainer'
 import { useNavigate, useParams } from 'react-router-dom'
 
 
+
 export default function Dialogs(props) {
-  const { chats } = props
+  const { chats, isAuth } = props
 
   const navigate = useNavigate()
   const { chatId } = useParams()
@@ -22,6 +23,8 @@ export default function Dialogs(props) {
     setChatUser(chatUser)
     navigate(`/dialogs/${chatUser}`)
   }
+
+  if(isAuth===false){navigate(`/login`)}
 
   return (
     <Box sx={{

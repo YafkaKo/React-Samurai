@@ -1,66 +1,50 @@
-import React from 'react'
-import { connect } from 'react-redux';
-import { handleCurrentPage, handleFetching, handleFollow, handleFollowingProgress, handlePagination, handleUsers } from '../../redux/users-reducer';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { createSelector } from 'reselect';
+import {
+  getUsersThunkCreator,
+  handleCurrentPage,
+  handleFollow,
+  handleFollowingProgress
+} from '../../redux/users-reducer';
 import Users from './Users';
-import UsersAPI from '../../API/API';
+import authRedirect from '../../HOC/AuthRedirect';
 
-class UsersContainer extends React.Component {
-  componentDidMount() {
-    const { currentPage, usersPerPage } = this.props;
+// Оптимизированный селектор
 
-    this.props.handleFetching(true)
-    UsersAPI.getUsersAPI(currentPage,usersPerPage).then(response => {
-      this.props.handleFetching(false)
-      this.props.handleUsers(response.items);
-      this.props.handlePagination(usersPerPage, response.totalCount); // Передаем общее количество пользователей
-    });
-  }
+const selectUsersData = createSelector(
+  [(state) => state.usersPage],
+  (usersPage) => ({
+    users: usersPage.users,
+    currentPage: usersPage.currentPage,
+    usersPerPage: usersPage.paginationSize,
+    totalCount: usersPage.totalCount,
+    isFetching: usersPage.isFetching,
+    FollowingIsProgress: usersPage.FollowingIsProgress
 
-  componentDidUpdate(prevProps) {
-    const { currentPage, usersPerPage } = this.props;
+  })
+);
 
 
-    // Если изменилась текущая страница или количество пользователей на странице, загружаем новых пользователей
-    if (prevProps.currentPage !== currentPage) {
-      this.props.handleFetching(true)
-      UsersAPI.getUsersAPI(currentPage,usersPerPage).then(response => {
-        this.props.handleFetching(false)
-        this.props.handleUsers(response.items);
-      });
-    }
-  }
+const UsersContainer = (props) => {
+  const dispatch = useDispatch();
+  const usersData = useSelector(selectUsersData);
 
-  render() {
-    const { handleFollow, users, usersPerPage, handleCurrentPage, currentPage, totalCount, isFetching, handleFollowingProgress,FollowingIsProgress } = this.props;
+  useEffect(() => {
+    dispatch(getUsersThunkCreator(usersData.currentPage, usersData.usersPerPage));
+  }, [usersData.currentPage, usersData.usersPerPage, dispatch]);
 
-    return (
-      <Users handleFollow={handleFollow} users={users} usersPerPage={usersPerPage} handleCurrentPage={handleCurrentPage} currentPage={currentPage} totalCount={totalCount} isFetching = {isFetching} handleFollowingProgress={handleFollowingProgress} FollowingIsProgress={FollowingIsProgress}/>
-
-    );
-  }
-}
-
-function mapStateToProps(state) {
-  return {
-    users: state.usersPage.users,
-    paginationSize: state.usersPage.paginationSize,
-    totalCount: state.usersPage.totalCount,
-    usersPerPage: state.usersPage.paginationSize,
-    currentPage: state.usersPage.currentPage,
-    isFetching: state.usersPage.isFetching,
-    FollowingIsProgress: state.usersPage.FollowingIsProgress,
+  const usersProps = {
+    ...usersData,
+    handleFollow: (userId, isFollowed) => dispatch(handleFollow(userId, isFollowed)),
+    handleCurrentPage: (page) => dispatch(handleCurrentPage(page)),
+    handleFollowingProgress: (isFetching, userId) =>
+      dispatch(handleFollowingProgress(isFetching, userId))
   };
-}
 
-const mapDispatchesToProps = {
-    handleFollow,
-    handleUsers,
-    handlePagination,
-    handleCurrentPage,
-    handleFetching,
-    handleFollowingProgress
-}
+  return <Users {...usersProps} />;
+};
 
-export default connect(
-  mapStateToProps, mapDispatchesToProps
-)(UsersContainer);
+
+
+export default authRedirect(UsersContainer);

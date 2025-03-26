@@ -7,6 +7,7 @@ import Sidebar from './Components/Sidebar/Sidebar'
 import Profile from './Components/Profile/Profile'
 import DialogsContainer from './Components/Dialogs/DialogsContainer'
 import UsersContainer from './Components/Users/UsersContainer'
+import Login from './Components/Login/Login'
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
           <Route path="/dialogs" element={<DialogsContainer />} />
           <Route path="/dialogs/:chatId" element={<DialogsContainer />} />
           <Route path="/users" element={<UsersContainer />} />
+          <Route path="/login" element={<Login />} />
           {/*<Route path="/settings" element={<Settings/>}/>*/}
         </Routes>
       </Box>

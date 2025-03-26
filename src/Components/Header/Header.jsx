@@ -2,27 +2,17 @@ import React, { useEffect } from 'react';
 import {Container, Link, Typography} from "@mui/material";
 import CallEndSharpIcon from '@mui/icons-material/CallEndSharp';
 import CustomNavLink from '../Sidebar/CustomNavLink/CustomNavLink';
-import axios from 'axios';
-import { connect } from 'react-redux';
-import {handleAuth} from '../../redux/auth-reducer'
+import { connect, useDispatch } from 'react-redux';
+import {authThunkCreator, handleAuth} from '../../redux/auth-reducer'
 
 
 
 const Header = (props) => {
     const {isAuth,login,handleAuth} = props
+    const dispatch = useDispatch()
     useEffect(()=>{
-        axios.get(`https://social-network.samuraijs.com/api/1.0/auth/me`,{withCredentials:true})
-        .then(response=>{
-
-            if(response.data.resultCode===0){
-                const {id,login,email} =  response.data.data
-                handleAuth(id,login,email)
-            }
-        })
-        .catch(error => {
-                console.error('Error fetching profile:', error); // Убираем состояние загрузки в случае ошибки
-              });
-    },[handleAuth,login])
+        dispatch(authThunkCreator())
+    },[handleAuth,login,dispatch])
     return (
             <Container component="header" sx={{pt: 2, pb: 2,
                 borderBottom: "2px solid",

@@ -1,26 +1,18 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { connect } from 'react-redux';
+import {  useParams } from 'react-router-dom';
+import { connect, useDispatch } from 'react-redux';
 import { Avatar, Box, List, ListItem, Typography, CircularProgress } from '@mui/material';
-import axios from 'axios';
-import { handleFetching, handleProfile } from '../../redux/profile-reducer';
+import { getProfileThunkCreator, handleFetching, handleProfile } from '../../redux/profile-reducer';
 import MyPostsContainer from './MyPosts/MyPostsContainer';
+import authRedirect from '../../HOC/AuthRedirect';
 
 const ProfileContainer = ({ profile, isFetching, handleFetching, handleProfile }) => {
   const { id } = useParams(); // Получаем id из URL
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    handleFetching(true); // Устанавливаем состояние загрузки
-    axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${id}`)
-      .then(response => {
-        handleProfile(response.data); // Передаем данные профиля в Redux
-        handleFetching(false); // Убираем состояние загрузки
-      })
-      .catch(error => {
-        console.error('Error fetching profile:', error);
-        handleFetching(false); // Убираем состояние загрузки в случае ошибки
-      });
-  }, [id, handleFetching, handleProfile]); // Зависимости: id, handleFetching, handleProfile
+    dispatch(getProfileThunkCreator(id))
+  }, [id, handleFetching, handleProfile,dispatch]); // Зависимости: id, handleFetching, handleProfile
 
   if (isFetching) {
     return (
@@ -29,6 +21,8 @@ const ProfileContainer = ({ profile, isFetching, handleFetching, handleProfile }
       </Box>
     );
   }
+
+  <AuthRedirectComponent/>
 
   if (!profile) {
     return <div>Profile not found</div>;
@@ -65,9 +59,11 @@ const ProfileContainer = ({ profile, isFetching, handleFetching, handleProfile }
   );
 };
 
+const AuthRedirectComponent = authRedirect(ProfileContainer)
+
 const mapStateToProps = (state) => ({
   profile: state.profilePage.profile,
-  isFetching: state.profilePage.isFetching,
+  isFetching: state.profilePage.isFetching
 });
 
 const mapDispatchToProps = {
@@ -75,5 +71,5 @@ const mapDispatchToProps = {
   handleProfile,
 };
 
-const Profile = connect(mapStateToProps, mapDispatchToProps)(ProfileContainer);
+const Profile = connect(mapStateToProps, mapDispatchToProps)(AuthRedirectComponent);
 export default Profile

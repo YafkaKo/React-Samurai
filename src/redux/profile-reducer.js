@@ -1,3 +1,4 @@
+import UsersAPI from '../API/API'
 import { DispatchConst } from './store'
 
 const initialState = {
@@ -54,5 +55,20 @@ export const handleFetching = (isFetching) =>
 
 export const handleLikesCount = (idOfPost, newLikesCount) =>
   ({ type: DispatchConst.SET_LIKE_COUNT, idOfPost: idOfPost, newLikesCount: newLikesCount })
+
+export const getProfileThunkCreator = (id) =>{
+  return (dispatch) =>{
+    dispatch(handleFetching(true)); // Устанавливаем состояние загрузки
+    UsersAPI.getProfileAPI(id)
+      .then(response => {
+        dispatch(handleProfile(response.data)); // Передаем данные профиля в Redux
+        dispatch(handleFetching(false)); // Убираем состояние загрузки
+      })
+      .catch(error => {
+        console.error('Error fetching profile:', error);
+        dispatch(handleFetching(false)); // Убираем состояние загрузки в случае ошибки
+      });
+  }
+}
 
 export default profileReducer
