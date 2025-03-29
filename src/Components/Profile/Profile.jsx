@@ -22,12 +22,13 @@ import ProfileStatus from "./ProfileStatus/ProfileStatus";
 const ProfileContainer = (props) => {
   const {idOfUser, profile, status, isFetching, handleFetching, handleProfile } = props;
   let { id } = useParams(); // Получаем id из URL
+  if(!id)id = idOfUser
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getProfileThunkCreator(id,idOfUser));
-    dispatch(getProfileStatusThunkCreator(id,idOfUser));
-  }, [id, handleFetching, handleProfile, dispatch,idOfUser]); // Зависимости: id, handleFetching, handleProfile
+    dispatch(getProfileThunkCreator(id));
+    dispatch(getProfileStatusThunkCreator(id));
+  }, [id, handleFetching, handleProfile, dispatch]); // Зависимости: id, handleFetching, handleProfile
 
   if (isFetching) {
     return (
@@ -43,7 +44,7 @@ const ProfileContainer = (props) => {
   }
 
   if (!profile) {
-    return <div>Profile not found</div>;
+    return <Box sx={{display:'flex',justifyContent:'center',marginTop:'50px', flexGrow: 1}}><Typography variant='h1'>Profile not found</Typography></Box>;
   }
 
   return (

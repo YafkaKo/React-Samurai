@@ -75,6 +75,7 @@ export const handleLikesCount = (idOfPost, newLikesCount) => ({
 
 export const getProfileThunkCreator = (id) => {
   return (dispatch) => {
+    if(id) {
     dispatch(handleFetching(true)); // Устанавливаем состояние загрузки
     ProfileAPI.getProfileAPI(id)
       .then((response) => {
@@ -85,10 +86,13 @@ export const getProfileThunkCreator = (id) => {
         console.error("Error fetching profile:", error);
         dispatch(handleFetching(false)); // Убираем состояние загрузки в случае ошибки
       });
+    }
   };
+
 };
 export const getProfileStatusThunkCreator = (id) => {
   return (dispatch) => {
+    if(id){
     dispatch(handleFetching(true)); // Устанавливаем состояние загрузки
     ProfileAPI.getStatusAPI(id)
       .then((response) => {
@@ -99,6 +103,7 @@ export const getProfileStatusThunkCreator = (id) => {
         console.error("Error fetching profile:", error);
         dispatch(handleFetching(false)); // Убираем состояние загрузки в случае ошибки
       });
+    }
   };
 };
 

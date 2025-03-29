@@ -14,7 +14,6 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         ...action.data,
-        isAuth: true,
       };
     case DispatchConst.SET_AUTH:
       return {
@@ -27,18 +26,18 @@ const authReducer = (state = initialState, action) => {
   }
 };
 
-export const handleAuth = (id, login, email) => ({
+export const handleAuth = (id, login, email, isAuth) => ({
   type: DispatchConst.SET_USER_DATA,
-  data: { id, email, login },
+  data: { id, email, login, isAuth },
 });
-export const handleLogout = () => ({ type: DispatchConst.SET_AUTH });
+// export const handleLogout = () => ({ type: DispatchConst.SET_AUTH });
 export const authThunkCreator = () => {
   return (dispatch) => {
     AuthAPI.me()
       .then((response) => {
         if (response.data.resultCode === 0) {
           const { id, login, email } = response.data.data;
-          dispatch(handleAuth(id, login, email));
+          dispatch(handleAuth(id, login, email, true));
         }
       })
       .catch((error) => {
@@ -51,8 +50,9 @@ export const loginThunkCreator = (email, password) => async (dispatch) => {
     const response = await AuthAPI.loginAPI(email, password);
 
     if (response.data.resultCode === 0) {
-      const { id, login, email: userEmail } = response.data.data;
-      dispatch(handleAuth(id, login, userEmail));
+      // const { id, login, email: userEmail } = response.data.data;
+      // dispatch(handleAuth(id, login, userEmail));
+      dispatch(authThunkCreator());
       return { success: true };
     } else {
       return {
@@ -70,7 +70,8 @@ export const logoutThunkCreator = () => async (dispatch) => {
   try {
     const response = await AuthAPI.logoutAPI();
     if (response.data.resultCode === 0) {
-      dispatch(handleLogout());
+      dispatch(handleAuth(null, null, null, false));
+      // dispatch(handleLogout());
       return { success: true };
     } else {
       return {
