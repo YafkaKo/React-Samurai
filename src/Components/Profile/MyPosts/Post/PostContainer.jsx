@@ -31,6 +31,7 @@ const mapStateToProps = (state, ownProps) => {
         avatar: post.avatar,
         text: post.text,
         likes: post.likes,
+        id:post.id
     };
 };
 

@@ -32,8 +32,7 @@ const initialState = {
           timestamp: '2023-10-01T10:20:00Z',
           isMyMessage: true
         }
-      ],
-      newMessageText: ''
+      ]
     },
     {
       id: 2,
@@ -65,8 +64,7 @@ const initialState = {
           timestamp: '2023-10-01T11:25:00Z',
           isMyMessage: true
         }
-      ],
-      newMessageText: ''
+      ]
     },
     {
       id: 3,
@@ -103,8 +101,7 @@ const initialState = {
           timestamp: '2023-10-01T12:20:00Z',
           isMyMessage: true
         }
-      ],
-      newMessageText: ''
+      ]
     },
     {
       id: 4,
@@ -136,8 +133,7 @@ const initialState = {
           timestamp: '2023-10-01T13:20:00Z',
           isMyMessage: true
         }
-      ],
-      newMessageText: ''
+      ]
     },
     {
       id: 5,
@@ -164,8 +160,7 @@ const initialState = {
           timestamp: '2023-10-01T14:20:00Z',
           isMyMessage: true
         }
-      ],
-      newMessageText: ''
+      ]
     },
     {
       id: 6,
@@ -197,8 +192,7 @@ const initialState = {
           timestamp: '2023-10-01T15:20:00Z',
           isMyMessage: true
         }
-      ],
-      newMessageText: ''
+      ]
     },
     {
       id: 7,
@@ -230,8 +224,7 @@ const initialState = {
           timestamp: '2023-10-01T16:20:00Z',
           isMyMessage: true
         }
-      ],
-      newMessageText: ''
+      ]
     },
     {
       id: 8,
@@ -258,8 +251,7 @@ const initialState = {
           timestamp: '2023-10-01T17:20:00Z',
           isMyMessage: true
         }
-      ],
-      newMessageText: ''
+      ]
     },
     {
       id: 9,
@@ -291,8 +283,7 @@ const initialState = {
           timestamp: '2023-10-01T18:20:00Z',
           isMyMessage: true
         }
-      ],
-      newMessageText: ''
+      ]
     },
     {
       id: 10,
@@ -324,8 +315,7 @@ const initialState = {
           timestamp: '2023-10-01T19:20:00Z',
           isMyMessage: true
         }
-      ],
-      newMessageText: ''
+      ]
     }
   ]
 }
@@ -345,19 +335,19 @@ const dialogsReducer = (state = initialState, action) => {
             : chat
         ),
       };
-    case DispatchConst.NEW_MESSAGE_TEXT:
-      console.log('NEW_MESSAGE_TEXT')
-      return {
-        ...state,
-        chats: state.chats.map((chat) =>
-          chat.id === action.idOfUser
-            ? {
-              ...chat,
-              newMessageText: action.newMessageText, // Обновляем текст нового сообщения
-            }
-            : chat
-        ),
-      };
+    // case DispatchConst.NEW_MESSAGE_TEXT:
+      // console.log('NEW_MESSAGE_TEXT')
+      // return {
+      //   ...state,
+      //   chats: state.chats.map((chat) =>
+      //     chat.id === action.idOfUser
+      //       ? {
+      //         ...chat,
+      //         newMessageText: action.newMessageText, // Обновляем текст нового сообщения
+      //       }
+      //       : chat
+      //   ),
+      // };
     default:
       return state;
   }
@@ -366,8 +356,8 @@ const dialogsReducer = (state = initialState, action) => {
 export const addMessageActionCreator = (newMessage, idOfUser) =>
   ({ type: DispatchConst.ADD_MESSAGE, idOfUser: idOfUser, newMessage: newMessage })
 
-export const newMessageTextActionCreator = (newMessageText, idOfUser) =>
-  ({ type: DispatchConst.NEW_MESSAGE_TEXT, idOfUser: idOfUser, newMessageText: newMessageText })
+// export const newMessageTextActionCreator = (newMessageText, idOfUser) =>
+//   ({ type: DispatchConst.NEW_MESSAGE_TEXT, idOfUser: idOfUser, newMessageText: newMessageText })
 
 
 export default dialogsReducer

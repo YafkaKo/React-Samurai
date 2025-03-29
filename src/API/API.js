@@ -23,17 +23,39 @@ const instance = axios.create({
       .delete(`follow/${userId}`) // Changed from POST to DELETE
       .then((response) => response.data);
   },
+
+  getStatusAPI(id){
+    return instance
+      .get(`profile/status/${id}`)
+  }
+
+}
+ export const ProfileAPI = {
   getProfileAPI(id){
     return instance
       .get(`profile/${id}`)
 
   },
+  getStatusAPI(id){
+    return instance
+      .get(`profile/status/${id}`)
+  },
+  setStatusAPI(newStatus){
+    return instance
+      .put(`profile/status`,{status: newStatus})
+  }
 
 }
 
 export const AuthAPI = {
   me: ()=>{
     return instance.get(`auth/me`)
+  },
+  loginAPI: (email,password)=>{
+    return instance.post(`auth/login`,{email,password})
+  },
+  logoutAPI: ()=>{
+    return instance.delete(`auth/login`)
   }
 }
 
