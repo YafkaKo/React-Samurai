@@ -1,4 +1,7 @@
-import { DispatchConst } from './store'
+const DispatchConst = {
+  ADD_MESSAGE: "ADD_MESSAGE",
+};
+
 
 const initialState = {
   chats: [
@@ -335,19 +338,6 @@ const dialogsReducer = (state = initialState, action) => {
             : chat
         ),
       };
-    // case DispatchConst.NEW_MESSAGE_TEXT:
-      // console.log('NEW_MESSAGE_TEXT')
-      // return {
-      //   ...state,
-      //   chats: state.chats.map((chat) =>
-      //     chat.id === action.idOfUser
-      //       ? {
-      //         ...chat,
-      //         newMessageText: action.newMessageText, // Обновляем текст нового сообщения
-      //       }
-      //       : chat
-      //   ),
-      // };
     default:
       return state;
   }
@@ -355,9 +345,5 @@ const dialogsReducer = (state = initialState, action) => {
 
 export const addMessageActionCreator = (newMessage, idOfUser) =>
   ({ type: DispatchConst.ADD_MESSAGE, idOfUser: idOfUser, newMessage: newMessage })
-
-// export const newMessageTextActionCreator = (newMessageText, idOfUser) =>
-//   ({ type: DispatchConst.NEW_MESSAGE_TEXT, idOfUser: idOfUser, newMessageText: newMessageText })
-
 
 export default dialogsReducer

@@ -17,7 +17,7 @@ const selectUsersData = createSelector(
   (usersPage) => ({
     users: usersPage.users,
     currentPage: usersPage.currentPage,
-    usersPerPage: usersPage.paginationSize,
+    usersPerPage: usersPage.usersPerPage,
     totalCount: usersPage.totalCount,
     isFetching: usersPage.isFetching,
     FollowingIsProgress: usersPage.FollowingIsProgress

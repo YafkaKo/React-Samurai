@@ -1,16 +1,16 @@
-import { connect } from 'react-redux'
-import Dialogs from './Dialogs'
+import { useSelector } from 'react-redux';
+import Dialogs from './Dialogs';
 import authRedirect from '../../HOC/AuthRedirect';
-import { compose } from 'redux';
+import { createSelector } from '@reduxjs/toolkit';
 
+const selectDialogsData = createSelector(
+  [(state) => state.dialogsPage, (state) => state.auth.isAuth],
+  (dialogsPage, isAuth) => ({chats: dialogsPage.chats, isAuth})
+)
 
+const DialogsContainer = () => {
+  const { chats, isAuth } = useSelector(selectDialogsData);
+  return <Dialogs chats={chats} isAuth={isAuth} />;
+}
 
-const mapStateToProps = (state) => ({
-  chats: state.dialogsPage.chats
-});
-
-
-export default compose(
-  authRedirect,
-  connect(mapStateToProps, null)
-)(Dialogs)
+export default authRedirect(DialogsContainer);

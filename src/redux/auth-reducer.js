@@ -1,5 +1,9 @@
 import { AuthAPI } from "../API/API";
-import { DispatchConst } from "./store";
+
+const DispatchConst = {
+  SET_USER_DATA: "SET_USER_DATA",
+  SET_AUTH: "SET_AUTH",
+};
 
 const initialState = {
   id: null,
@@ -30,21 +34,20 @@ export const handleAuth = (id, login, email, isAuth) => ({
   type: DispatchConst.SET_USER_DATA,
   data: { id, email, login, isAuth },
 });
-// export const handleLogout = () => ({ type: DispatchConst.SET_AUTH });
-export const authThunkCreator = () => {
-  return (dispatch) => {
-    AuthAPI.me()
-      .then((response) => {
-        if (response.data.resultCode === 0) {
-          const { id, login, email } = response.data.data;
-          dispatch(handleAuth(id, login, email, true));
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching profile:", error); // Убираем состояние загрузки в случае ошибки
-      });
-  };
+
+export const authThunkCreator = () => async (dispatch) => {
+  try{
+    const response = await AuthAPI.me()
+    if (response.data.resultCode === 0) {
+      const { id, login, email } = response.data.data;
+      dispatch(handleAuth(id, login, email, true));
+      return { success: true };
+    }
+  } catch(error){
+    console.error("Error fetching profile:", error);
+  } 
 };
+
 export const loginThunkCreator = (email, password) => async (dispatch) => {
   try {
     const response = await AuthAPI.loginAPI(email, password);
@@ -66,7 +69,6 @@ export const loginThunkCreator = (email, password) => async (dispatch) => {
   }
 };
 export const logoutThunkCreator = () => async (dispatch) => {
-  console.log("dispatch");
   try {
     const response = await AuthAPI.logoutAPI();
     if (response.data.resultCode === 0) {

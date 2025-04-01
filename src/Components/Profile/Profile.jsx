@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { connect, useDispatch } from "react-redux";
+import React, { useEffect,memo } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Avatar,
   Box,
@@ -12,25 +12,29 @@ import {
 import {
   getProfileStatusThunkCreator,
   getProfileThunkCreator,
-  handleFetching,
-  handleProfile,
 } from "../../redux/profile-reducer";
-import MyPostsContainer from "./MyPosts/MyPostsContainer";
-// import authRedirect from '../../HOC/AuthRedirect';
 import ProfileStatus from "./ProfileStatus/ProfileStatus";
+import { createSelector } from "@reduxjs/toolkit";
+import authRedirect from "../../HOC/AuthRedirect";
+import MyPosts from "./MyPosts/MyPosts";
 
-const ProfileContainer = (props) => {
-  const {idOfUser, profile, status, isFetching, handleFetching, handleProfile } = props;
+const Profile = memo(() => {
+  console.log('render Profile')
+  const { idOfUser, profile, status, isFetching } = useSelector(selectProfileData);
   let { id } = useParams(); // Получаем id из URL
-  if(!id)id = idOfUser
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (!idOfUser) {
+      navigate("/login");
+      return;
+    }
     dispatch(getProfileThunkCreator(id));
     dispatch(getProfileStatusThunkCreator(id));
-  }, [id, handleFetching, handleProfile, dispatch]); // Зависимости: id, handleFetching, handleProfile
+  }, [id, dispatch, navigate, idOfUser]); // Зависимости: id, dispatch, navigate, idOfUser
 
-  if (isFetching) {
+  if (isFetching || !profile) {
     return (
       <Box
         display="flex"
@@ -43,18 +47,8 @@ const ProfileContainer = (props) => {
     );
   }
 
-  if (!profile) {
-    return <Box sx={{display:'flex',justifyContent:'center',marginTop:'50px', flexGrow: 1}}><Typography variant='h1'>Profile not found</Typography></Box>;
-  }
-
   return (
     <Box sx={{ p: "15px", width: "100%" }}>
-      {/* <Box
-        component="img"
-        sx={{ width: '100%', height: '300px', mb: '15px' }}
-        src="https://i.pinimg.com/736x/82/b5/80/82b580dab030b6397b874244058c13df.jpg"
-        alt=""
-      /> */}
       <Box sx={{ display: "flex", gap: "15px" }}>
         <Avatar
           alt="User Avatar"
@@ -79,21 +73,20 @@ const ProfileContainer = (props) => {
           </List>
         </Box>
       </Box>
-      <MyPostsContainer />
+      <MyPosts />
     </Box>
-  );
-};
+  )
+}
+)
 
-const mapStateToProps = (state) => ({
-  idOfUser: state.auth.id,
-  profile: state.profilePage.profile,
-  isFetching: state.profilePage.isFetching,
-  status: state.profilePage.status,
-});
+const selectProfileData = createSelector(
+  [(state) => state.profilePage, (state) => state.auth],
+  (profilePage, auth) => ({
+    idOfUser: auth.id,
+    profile: profilePage.profile,
+    isFetching: profilePage.isFetching,
+    status: profilePage.status,
+  })
+);
 
-const mapDispatchToProps = {
-  handleFetching,
-  handleProfile,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileContainer);
+export default authRedirect(Profile);

@@ -1,22 +1,20 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Button, Container, Link, Stack, Typography } from "@mui/material";
 import CallEndSharpIcon from "@mui/icons-material/CallEndSharp";
 import CustomNavLink from "../Sidebar/CustomNavLink/CustomNavLink";
 import { connect, useDispatch } from "react-redux";
-import { authThunkCreator, handleAuth, logoutThunkCreator } from "../../redux/auth-reducer";
+import { logoutThunkCreator } from "../../redux/auth-reducer";
 // import { AuthAPI } from "../../API/API";
 
 const Header = (props) => {
-  const { isAuth, login, handleAuth } = props;
+  const { isAuth, login } = props;
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(authThunkCreator());
-  }, [handleAuth, login, dispatch]);
+  // useEffect(() => {
+  //   dispatch(authThunkCreator());
+  // }, [ login, dispatch]);
 
   function handleLogout(){
-    console.log('click')
-    // AuthAPI.logoutAPI()
     dispatch(logoutThunkCreator())
   }
 
@@ -67,6 +65,5 @@ const mapStateToProps = (state) => {
     login: state.auth.login,
   };
 };
-const mapDispatchToProps = { handleAuth };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(mapStateToProps)(Header);

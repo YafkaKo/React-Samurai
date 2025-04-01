@@ -7,7 +7,8 @@ import {
   Link,
   Container,
   Box,
-  Alert
+  Alert,
+  Snackbar
 } from "@mui/material";
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
@@ -44,18 +45,26 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [authError, setAuthError] = useState(null)
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
 
   const onSubmit = async (data) => {
     const { email, password } = data;
     const result = await dispatch(loginThunkCreator(email, password));
 
     if (result.success) {
-      // Перенаправление при успешной авторизации
-      navigate("/profile");
+        // Перенаправление при успешной авторизации
+        // navigate("/profile");
+        setOpenSnackbar(true);
+        setTimeout(() => navigate("/profile"), 3000);
     } else {
       // Показать ошибку пользователю
       setAuthError(result.message);
     }
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
   };
 
   return (
@@ -155,6 +164,16 @@ const Login = () => {
           <Link href="/registration">Sign up</Link>
         </Typography>
       </Box>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
+        You have logged in successfully!
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

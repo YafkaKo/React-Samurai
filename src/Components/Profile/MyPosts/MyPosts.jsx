@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import PostContainer from "./Post/PostContainer";
+import React, { useState,memo } from "react";
 import SendIcon from "@mui/icons-material/Send";
 import {
   Box,
@@ -9,9 +8,18 @@ import {
   TextareaAutosize,
   Typography,
 } from "@mui/material";
+import { handlePost } from "../../../redux/profile-reducer";
+import { useDispatch, useSelector } from "react-redux";
+import Post from "./Post/Post";
 
-const MyPosts = (props) => {
-  const { handlePost, posts } = props;
+const MyPosts = memo((props) => {
+  console.log('render MyPosts')
+  const dispatch = useDispatch();
+  const posts = useSelector((state) => state.profilePage.posts);
+
+  const handlePostAction = (newPost) => {
+    dispatch(handlePost(newPost));
+  };
 
   const [newPostText, setNewPostText] = useState("");
 
@@ -23,7 +31,6 @@ const MyPosts = (props) => {
   };
 
   const handleSubmit = (e) => {
-    console.log(e);
     e.preventDefault();
     sendPost();
   };
@@ -39,7 +46,7 @@ const MyPosts = (props) => {
       likes: 0,
     };
 
-    handlePost(newElement);
+    handlePostAction(newElement);
     setNewPostText("");
   };
 
@@ -81,12 +88,13 @@ const MyPosts = (props) => {
       <List>
         {posts.map((post) => (
           <ListItem key={post.id} sx={{ p: 0, mb: "15px" }}>
-            <PostContainer id={post.id} />
+            <Post id={post.id} />
           </ListItem>
         ))}
       </List>
     </Box>
-  );
-};
+  )
+}
+)
 
 export default MyPosts;

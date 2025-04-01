@@ -1,11 +1,19 @@
-import { DispatchConst } from './store'
 import UsersAPI from '../API/API';
+
+ const DispatchConst = {
+  SET_FOLLOW_USER: "SET_FOLLOW_USER",
+  SET_USERS: "SET_USERS",
+  SET_PAGINATION: "SET_PAGINATION",
+  SET_CURRENT_PAGE: "SET_CURRENT_PAGE",
+  SET_FETCHING: "SET_FETCHING",
+  SET_FOLLOWING_PROGRESS: "SET_FOLLOWING_PROGRESS",
+};
 
 
 const initialState = {
   users: [
   ],
-  paginationSize: 6,
+  usersPerPage: 6,
   currentPage: 1,
   isFetching: false,
   FollowingIsProgress: []
@@ -35,7 +43,7 @@ const usersReducer = (state = initialState, action) => {
     case DispatchConst.SET_PAGINATION:
       return {
         ...state,
-        paginationSize: action.paginationSize,
+        usersPerPage: action.usersPerPage,
         totalCount: action.totalCount
       }
 
@@ -69,8 +77,8 @@ export const handleFollow = (newFollow, idOfUser) =>
 export const handleUsers = (newState) =>
   ({ type: DispatchConst.SET_USERS, newState })
 
-export const handlePagination = (paginationSize,totalCount) =>
-  ({ type: DispatchConst.SET_PAGINATION, paginationSize,totalCount })
+export const handlePagination = (usersPerPage,totalCount) =>
+  ({ type: DispatchConst.SET_PAGINATION, usersPerPage,totalCount })
 
 export const handleCurrentPage = (currentPage) =>
   ({ type: DispatchConst.SET_CURRENT_PAGE, currentPage })
@@ -83,13 +91,13 @@ export const handleFollowingProgress = (isFetching,userId) =>
 
 
 export const getUsersThunkCreator = (currentPage,usersPerPage)=> {
-  return (dispatch)=>{
+  return async(dispatch)=>{
   dispatch(handleFetching(true))
-    UsersAPI.getUsersAPI({currentPage,usersPerPage}).then(response => {
+    const response = await UsersAPI.getUsersAPI({currentPage,usersPerPage})
       dispatch(handleFetching(false))
       dispatch(handleUsers(response.items));
       dispatch(handlePagination(usersPerPage, response.totalCount)); // Передаем общее количество пользователей
-    });
+
 }
 }
 

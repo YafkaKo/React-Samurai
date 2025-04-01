@@ -1,5 +1,13 @@
 import { ProfileAPI } from "../API/API";
-import { DispatchConst } from "./store";
+
+export const DispatchConst = {
+  ADD_POST: "ADD_POST",
+  SET_LIKE_COUNT: "SET_LIKE_COUNT",
+  SET_FETCHING: "SET_FETCHING",
+  SET_PROFILE: "SET_PROFILE",
+  SET_STATUS: "SET_STATUS",
+};
+
 
 const initialState = {
   posts: [],
@@ -74,48 +82,45 @@ export const handleLikesCount = (idOfPost, newLikesCount) => ({
 });
 
 export const getProfileThunkCreator = (id) => {
-  return (dispatch) => {
+   return async (dispatch) => {
     if(id) {
     dispatch(handleFetching(true)); // Устанавливаем состояние загрузки
-    ProfileAPI.getProfileAPI(id)
-      .then((response) => {
+    try{
+    const response = await ProfileAPI.getProfileAPI(id)
         dispatch(handleProfile(response.data)); // Передаем данные профиля в Redux
         dispatch(handleFetching(false)); // Убираем состояние загрузки
-      })
-      .catch((error) => {
+       } catch(error){
         console.error("Error fetching profile:", error);
         dispatch(handleFetching(false)); // Убираем состояние загрузки в случае ошибки
-      });
+      };
     }
+  }
   };
 
-};
 export const getProfileStatusThunkCreator = (id) => {
-  return (dispatch) => {
+  return async (dispatch) => {
     if(id){
     dispatch(handleFetching(true)); // Устанавливаем состояние загрузки
-    ProfileAPI.getStatusAPI(id)
-      .then((response) => {
+    const response = await ProfileAPI.getStatusAPI(id)
+      try{
         dispatch(handleStatus(response.data)); // Передаем данные профиля в Redux
         dispatch(handleFetching(false)); // Убираем состояние загрузки
-      })
-      .catch((error) => {
+      }catch(error){
         console.error("Error fetching profile:", error);
         dispatch(handleFetching(false)); // Убираем состояние загрузки в случае ошибки
-      });
+      };
     }
-  };
+  }
 };
 
 export const setProfileStatusThunkCreator = (id) => {
-  return (dispatch) => {
-    ProfileAPI.setStatusAPI(id)
-      .then((response) => {
-        if (response.data.resultCode === 0) console.log("setStatus"); // Передаем данные профиля в Redux
-      })
-      .catch((error) => {
-        console.error("Error fetching profile:", error);
-      });
+  return async (dispatch) => {
+    const response = ProfileAPI.setStatusAPI(id)
+    try{
+      dispatch(handleStatus(response.data)); // Передаем данные профиля в Redux
+    }catch(error){
+      console.error("Error fetching profile:", error);
+    }
   };
 };
 
