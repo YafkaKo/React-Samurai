@@ -6,6 +6,7 @@ export const DispatchConst = {
   SET_FETCHING: "SET_FETCHING",
   SET_PROFILE: "SET_PROFILE",
   SET_STATUS: "SET_STATUS",
+  PUT_PROFILE: "PUT_PROFILE"
 };
 
 
@@ -115,7 +116,7 @@ export const getProfileStatusThunkCreator = (id) => {
 
 export const setProfileStatusThunkCreator = (id) => {
   return async (dispatch) => {
-    const response = ProfileAPI.setStatusAPI(id)
+    const response = await ProfileAPI.setStatusAPI(id)
     try{
       dispatch(handleStatus(response.data)); // Передаем данные профиля в Redux
     }catch(error){
@@ -123,5 +124,18 @@ export const setProfileStatusThunkCreator = (id) => {
     }
   };
 };
+
+export const putProfileThunkCreator = (profile) =>  async (dispatch) => {
+    const response = await ProfileAPI.putProfileAPI(profile)
+    if(response.data.resultCode===1||response.data.data.length===0){
+      return
+    }
+    try{
+      dispatch(getProfileThunkCreator(profile.userId)); // Передаем данные профиля в Redux
+    }catch(error){
+      console.error("Error fetching profile:", error);
+    }
+
+  };
 
 export default profileReducer;

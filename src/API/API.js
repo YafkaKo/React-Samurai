@@ -43,6 +43,10 @@ const instance = axios.create({
   setStatusAPI(newStatus){
     return instance
       .put(`profile/status`,{status: newStatus})
+  },
+  putProfileAPI(profile){
+    return instance
+      .put(`profile`,profile)
   }
 
 }

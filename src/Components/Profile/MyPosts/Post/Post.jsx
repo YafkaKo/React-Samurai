@@ -12,7 +12,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { handleLikesCount } from "../../../../redux/profile-reducer";
 
 const Post = memo((props) =>{
-  console.log("render Post");
   const dispatch = useDispatch();
   const { id } = props;
 

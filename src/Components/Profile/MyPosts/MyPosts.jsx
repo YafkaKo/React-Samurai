@@ -13,7 +13,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Post from "./Post/Post";
 
 const MyPosts = memo((props) => {
-  console.log('render MyPosts')
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.profilePage.posts);
 
