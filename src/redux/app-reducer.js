@@ -1,4 +1,4 @@
-import { authThunkCreator } from "./auth-reducer";
+import { authThunkCreator } from "./auth-reducer.ts";
 
  const DispatchConst = {
   SET_INIT: "SET_INIT"

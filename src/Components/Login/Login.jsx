@@ -14,7 +14,7 @@ import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { loginThunkCreator } from "../../redux/auth-reducer";
+import { loginThunkCreator } from "../../redux/auth-reducer.ts";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 

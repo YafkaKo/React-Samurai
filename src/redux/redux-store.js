@@ -2,7 +2,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import profileReducer from "./profile-reducer";
 import dialogsReducer from "./dialogs-reducer";
 import usersReducer from "./users-reducer";
-import authReducer from "./auth-reducer";
+import authReducer from "./auth-reducer.ts";
 import appReducer from "./app-reducer";
 
 const rootReducer = combineReducers({

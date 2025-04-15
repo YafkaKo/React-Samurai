@@ -3,7 +3,7 @@ import { Button, Container, Link, Stack, Typography } from "@mui/material";
 import CallEndSharpIcon from "@mui/icons-material/CallEndSharp";
 import CustomNavLink from "../Sidebar/CustomNavLink/CustomNavLink";
 import { connect, useDispatch } from "react-redux";
-import { logoutThunkCreator } from "../../redux/auth-reducer";
+import { logoutThunkCreator } from "../../redux/auth-reducer.ts";
 // import { AuthAPI } from "../../API/API";
 
 const Header = (props) => {
