@@ -1,18 +1,17 @@
 import React from "react";
 import { Button, Container, Link, Stack, Typography } from "@mui/material";
 import CallEndSharpIcon from "@mui/icons-material/CallEndSharp";
-import CustomNavLink from "../Sidebar/CustomNavLink/CustomNavLink";
+import CustomNavLink from "../Sidebar/CustomNavLink/CustomNavLink.tsx";
 import { connect, useDispatch } from "react-redux";
-import { logoutThunkCreator } from "../../redux/auth-reducer.ts";
-// import { AuthAPI } from "../../API/API";
+import { AuthDispatch, logoutThunkCreator } from "../../redux/auth-reducer.ts";
 
-const Header = (props) => {
-  const { isAuth, login } = props;
-  const dispatch = useDispatch();
+interface Props {
+  isAuth: boolean;
+  login: string;
+}
 
-  // useEffect(() => {
-  //   dispatch(authThunkCreator());
-  // }, [ login, dispatch]);
+const Header :React.FC<Props> = ({ isAuth, login } ) => {
+  const dispatch = useDispatch<AuthDispatch>();
 
   function handleLogout(){
     dispatch(logoutThunkCreator())
@@ -59,7 +58,7 @@ const Header = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state:any) => {
   return {
     isAuth: state.auth.isAuth,
     login: state.auth.login,

@@ -10,14 +10,19 @@ import {
   Alert,
   Snackbar
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { loginThunkCreator } from "../../redux/auth-reducer.ts";
+import { AuthDispatch, loginThunkCreator } from "../../redux/auth-reducer.ts";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
+
+type LoginFormInputs = {
+  email: string;
+  password: string;
+}
 // Схема валидации
 const schema = yup
   .object({
@@ -29,12 +34,12 @@ const schema = yup
   })
   .required();
 
-const Login = () => {
+const Login:FC = () => {
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<LoginFormInputs>({
     resolver: yupResolver(schema),
     defaultValues: {
       email: "",
@@ -42,13 +47,13 @@ const Login = () => {
     },
   });
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AuthDispatch>();
   const navigate = useNavigate();
-  const [authError, setAuthError] = useState(null)
+  const [authError, setAuthError] = useState<string|undefined>(undefined)
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data:LoginFormInputs) => {
     const { email, password } = data;
     const result = await dispatch(loginThunkCreator(email, password));
 
@@ -85,18 +90,22 @@ const Login = () => {
           borderRadius: "10px",
           boxShadow: "",
         }}
-        variant="outlined"
+        // variant="outlined"
       >
         <div>
-          <Typography level="h4" component="h1">
+          <Typography variant="h4" component="h1">
             <b>Welcome!</b>
           </Typography>
-          <Typography level="body-sm">Sign in to continue.</Typography>
+          <Typography sx={{ typography: 'body-sm' }}>Sign in to continue.</Typography>
         </div>
         {authError && (
+          <>
+          'Пустота'
           <Alert severity="error" sx={{ width: "100%" }}>
             {authError}
           </Alert>
+          </>
+
         )}
         <FormControl error={!!errors.email}>
           <FormLabel>Email</FormLabel>

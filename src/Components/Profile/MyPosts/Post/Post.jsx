@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { useDispatch, useSelector } from "react-redux";
-import { handleLikesCount } from "../../../../redux/profile-reducer";
+import { handleLikesCount } from "../../../../redux/profile-reducer.ts";
 
 const Post = memo((props) =>{
   const dispatch = useDispatch();

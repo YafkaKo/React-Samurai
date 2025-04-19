@@ -1,9 +1,25 @@
-const DispatchConst = {
-  ADD_MESSAGE: "ADD_MESSAGE",
-};
+import { ActionType,DispatchConst } from "../types/types.ts";
+
+export type MessageType = {
+  id: number,
+  text: string,
+  timestamp: string,
+  isMyMessage: Boolean
+}
+
+export type ChatType ={
+  id: number,
+  nickname: string,
+  avatar: string,
+  messages: MessageType[]
+}
+
+type InitialStateType = {
+  chats: ChatType[]
+}
 
 
-const initialState = {
+const initialState: InitialStateType = {
   chats: [
     {
       id: 1,
@@ -323,17 +339,19 @@ const initialState = {
   ]
 }
 
-const dialogsReducer = (state = initialState, action) => {
+
+const dialogsReducer = (state = initialState, action:ActionType):InitialStateType => {
   switch (action.type) {
     case DispatchConst.ADD_MESSAGE:
       console.log('ADD_MESSAGE')
       return {
         ...state,
-        chats: state.chats.map((chat) =>
+        chats: state.chats.map((chat:ChatType) =>
           chat.id === action.idOfUser
             ? {
               ...chat,
-              messages: [...chat.messages, action.newMessage], // Добавляем новое сообщение
+              messages: [...chat.messages, action.newMessage
+              ], // Добавляем новое сообщение
             }
             : chat
         ),
@@ -343,7 +361,7 @@ const dialogsReducer = (state = initialState, action) => {
   }
 }
 
-export const addMessageActionCreator = (newMessage, idOfUser) =>
-  ({ type: DispatchConst.ADD_MESSAGE, idOfUser: idOfUser, newMessage: newMessage })
+export const addMessageActionCreator = (newMessage:MessageType, idOfUser:number):ActionType =>
+  ({ type: DispatchConst.ADD_MESSAGE, idOfUser, newMessage })
 
 export default dialogsReducer

@@ -2,19 +2,19 @@ import React, { Suspense, useEffect } from "react";
 import { Box, CircularProgress, Container } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
 
-import Header from "./Components/Header/Header";
-import Sidebar from "./Components/Sidebar/Sidebar";
+import Header from "./Components/Header/Header.tsx";
+import Sidebar from "./Components/Sidebar/Sidebar.tsx";
 
-import Login from "./Components/Login/Login";
+import Login from "./Components/Login/Login.tsx";
 import { useDispatch, useSelector } from "react-redux";
-import { initialize } from "./redux/app-reducer";
+import { initialize } from "./redux/app-reducer.ts";
 
 const DialogsContainer = React.lazy(() =>
   import("./Components/Dialogs/DialogsContainer")
 );
 const Profile = React.lazy(() => import("./Components/Profile/Profile.jsx"));
 const UsersContainer = React.lazy(() =>
-  import("./Components/Users/UsersContainer")
+  import("./Components/Users/UsersContainer.tsx")
 );
 
 function App() {
@@ -25,7 +25,7 @@ function App() {
   useEffect(() => {
     dispatch(initialize());
   }, [dispatch]);
-  
+
   if (!initialized) {
     return <CircularProgress size={300} sx={{margin:'200px auto', display: 'flex'}}/>;
   }

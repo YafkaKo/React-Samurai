@@ -8,7 +8,7 @@ import {
   TextareaAutosize,
   Typography,
 } from "@mui/material";
-import { handlePost } from "../../../redux/profile-reducer";
+import { handlePost } from "../../../redux/profile-reducer.ts";
 import { useDispatch, useSelector } from "react-redux";
 import Post from "./Post/Post";
 

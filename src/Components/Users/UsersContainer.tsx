@@ -1,19 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import {
   getUsersThunkCreator,
   handleCurrentPage,
-  handleFollow,
-  handleFollowingProgress
-} from '../../redux/users-reducer';
-import Users from './Users';
-import authRedirect from '../../HOC/AuthRedirect';
+} from '../../redux/users-reducer.ts';
+import Users from './Users.tsx';
+import authRedirect from '../../HOC/AuthRedirect.js';
+import { RootState } from '../../redux/redux-store.ts';
+import { UsersDispatch } from '../../redux/users-reducer.ts';
+import { UsersPropsType } from '../../types/types.ts';
 
-// Оптимизированный селектор
 
 const selectUsersData = createSelector(
-  [(state) => state.usersPage],
+  [(state:RootState) => state.usersPage],
   (usersPage) => ({
     users: usersPage.users,
     currentPage: usersPage.currentPage,
@@ -21,25 +21,21 @@ const selectUsersData = createSelector(
     totalCount: usersPage.totalCount,
     isFetching: usersPage.isFetching,
     FollowingIsProgress: usersPage.FollowingIsProgress
-
   })
 );
 
 
-const UsersContainer = (props) => {
-  const dispatch = useDispatch();
+const UsersContainer: FC = () => {
+  const dispatch = useDispatch<UsersDispatch>();
   const usersData = useSelector(selectUsersData);
 
   useEffect(() => {
     dispatch(getUsersThunkCreator(usersData.currentPage, usersData.usersPerPage));
   }, [usersData.currentPage, usersData.usersPerPage, dispatch]);
 
-  const usersProps = {
+  const usersProps:UsersPropsType = {
     ...usersData,
-    handleFollow: (userId, isFollowed) => dispatch(handleFollow(userId, isFollowed)),
-    handleCurrentPage: (page) => dispatch(handleCurrentPage(page)),
-    handleFollowingProgress: (isFetching, userId) =>
-      dispatch(handleFollowingProgress(isFetching, userId))
+    handleCurrentPage: (page:number) => dispatch(handleCurrentPage(page)),
   };
 
   return <Users {...usersProps} />;

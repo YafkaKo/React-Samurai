@@ -1,20 +1,26 @@
-import React, { useState } from 'react'
+import React, { FC, FormEvent, KeyboardEvent, useState } from 'react'
 import { Box, Stack, Typography, IconButton, Input } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
+import {ChatType, MessageType} from '../../../redux/dialogs-reducer'
+import { ActionType } from '../../../types/types'
 
+interface PropsType {
+    messages: MessageType[];
+    activeChat: ChatType;
+    handleMessage: (idOfUser:number, newMessage:MessageType) => ActionType,
+}
 
-function MessagesActive(props) {
+const MessagesActive: FC<PropsType> = (props) => {
     const { messages, handleMessage, activeChat,
-        // newMessageText,handleInput
          } = props
-    const [newMessageText,setNewMessageText] = useState('')
-    const handleKeyPress = (e) => {
+    const [newMessageText,setNewMessageText] = useState<string>('')
+    const handleKeyPress = (e: KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             sendMessage();
         }
     };
-    const handleSubmit = (e) => {
+    const handleSubmit = (e:FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         sendMessage();
     };
@@ -62,7 +68,7 @@ function MessagesActive(props) {
                     maxRows={4}
                     value={newMessageText}
                     onChange={(e) => setNewMessageText( e.target.value)}
-                    onKeyPress={handleKeyPress}
+                    onKeyDown={handleKeyPress}
                     placeholder="Type a message..."
                     sx={{ ml: 1, flex: 1 }}
                     inputProps={{

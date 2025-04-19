@@ -13,7 +13,7 @@ import {
 import {
   getProfileStatusThunkCreator,
   getProfileThunkCreator,
-} from "../../redux/profile-reducer";
+} from "../../redux/profile-reducer.ts";
 import ProfileStatus from "./ProfileStatus/ProfileStatus";
 import { createSelector } from "@reduxjs/toolkit";
 import authRedirect from "../../HOC/AuthRedirect";

@@ -1,7 +1,7 @@
 import { Input, ListItem, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setProfileStatusThunkCreator } from "../../../redux/profile-reducer";
+import { setProfileStatusThunkCreator } from "../../../redux/profile-reducer.ts";
 
 const ProfileStatus = (props) => {
   const { status } = props;

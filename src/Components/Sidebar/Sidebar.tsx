@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Box, List } from "@mui/material";
-import CustomNavLink from "./CustomNavLink/CustomNavLink";
+import CustomNavLink from "./CustomNavLink/CustomNavLink.tsx";
 
-const links = [
+type link = {
+    id: number,
+    name: string,
+    link: string,
+}
+
+const links: link[] = [
     {
         id: 1,
         name: "Profile",
@@ -30,7 +36,7 @@ const links = [
     },
 ];
 
-const Sidebar = () => {
+const Sidebar : FC<React.Component> = () => {
     return (
         <Box component='nav' sx={{
             p: '15px',

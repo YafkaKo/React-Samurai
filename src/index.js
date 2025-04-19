@@ -5,7 +5,7 @@ import App from './App'
 import socialNetworkTheme from './SocialNetworkTheme'
 import { CssBaseline } from '@mui/material'
 import { ThemeProvider } from '@mui/material/styles'
-import store from './redux/redux-store'
+import store from './redux/redux-store.ts'
 import { Provider } from 'react-redux';
 
 

@@ -8,7 +8,7 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
-import MessagesActiveContainer from "./MessagesActive/MessagesActiveContainer";
+import MessagesActiveContainer from "./MessagesActive/MessagesActiveContainer.tsx";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function Dialogs(props) {

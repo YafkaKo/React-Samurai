@@ -1,15 +1,17 @@
 import { authThunkCreator } from "./auth-reducer.ts";
-
- const DispatchConst = {
-  SET_INIT: "SET_INIT"
-};
+import { ActionType,DispatchConst } from "../types/types.ts";
 
 
-const initialState = {
+
+type InitialStateType = {
+  initialized: boolean
+}
+
+const initialState: InitialStateType = {
   initialized: false,
 };
 
-const appReducer = (state = initialState, action) => {
+const appReducer = (state:InitialStateType = initialState, action:ActionType):InitialStateType => {
   switch (action.type) {
     case DispatchConst.SET_INIT:
       return {
@@ -22,12 +24,12 @@ const appReducer = (state = initialState, action) => {
   }
 };
 
-export const handleInit = (initialized) => ({
+export const handleInit = (initialized:boolean): ActionType => ({
   type: DispatchConst.SET_INIT,
-  initialized,
+  initialized
 });
 
-export const initialize = ()=> async (dispatch)=>{
+export const initialize = ()=> async (dispatch:any)=>{
     await dispatch(authThunkCreator());
    dispatch(handleInit(true))
 }

@@ -7,7 +7,7 @@ import {
   FormControlLabel,
   Input,
 } from "@mui/material";
-import { putProfileThunkCreator } from "../../redux/profile-reducer";
+import { putProfileThunkCreator } from "../../redux/profile-reducer.ts";
 import { useDispatch } from "react-redux";
 
 const ProfileEditMode = ({ profile, setEditMode }) => {

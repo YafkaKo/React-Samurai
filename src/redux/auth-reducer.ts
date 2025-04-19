@@ -1,14 +1,8 @@
+import { ThunkAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { AuthAPI } from "../API/API";
+import { RootState } from "./redux-store";
+import { ActionType,DispatchConst } from "../types/types.ts";
 
-type DispatchConstType = {
-  SET_USER_DATA: string,
-  SET_AUTH: string,
-}
-
-const DispatchConst: DispatchConstType = {
-  SET_AUTH: "SET_AUTH",
-  SET_USER_DATA: "SET_USER_DATA",
-};
 
 type initialStateType = {
   id: null | number,
@@ -17,6 +11,13 @@ type initialStateType = {
   isAuth: boolean,
 }
 
+export type AuthStateType = initialStateType
+
+export type AuthDispatch = ThunkDispatch<RootState, unknown, ActionType>;
+
+type AuthThunk<ReturnType = void> =ThunkAction<ReturnType, RootState, unknown, ActionType>;
+
+
 const initialState: initialStateType = {
   id: null,
   email: null,
@@ -24,12 +25,9 @@ const initialState: initialStateType = {
   isAuth: false,
 };
 
-type actionType = {
-  type: string,
-  data?: initialStateType,
-}
 
-const authReducer = (state:initialStateType = initialState, action:actionType) => {
+
+const authReducer = (state:initialStateType = initialState, action:ActionType):initialStateType => {
   switch (action.type) {
     case DispatchConst.SET_USER_DATA:
       return {
@@ -48,12 +46,12 @@ const authReducer = (state:initialStateType = initialState, action:actionType) =
   }
 };
 
-export const handleAuth = (id:number|null, login:string|null, email:string|null, isAuth:boolean|null) => ({
+export const handleAuth = (id:number|null, login:string|null, email:string|null, isAuth:boolean):ActionType => ({
   type: DispatchConst.SET_USER_DATA,
   data: { id, email, login, isAuth },
 });
 
-export const authThunkCreator = () => async (dispatch) => {
+export const authThunkCreator = (): AuthThunk<Promise<{ success: boolean } | undefined>> => async (dispatch:AuthDispatch) => {
   try{
     const response = await AuthAPI.me()
     if (response.data.resultCode === 0) {
@@ -66,7 +64,7 @@ export const authThunkCreator = () => async (dispatch) => {
   }
 };
 
-export const loginThunkCreator = (email:string, password:string) => async (dispatch) => {
+export const loginThunkCreator = (email:string, password:string): AuthThunk<Promise<{ success: boolean; message?: string }>> => async (dispatch:AuthDispatch) => {
   try {
     const response = await AuthAPI.loginAPI(email, password);
 
@@ -86,7 +84,7 @@ export const loginThunkCreator = (email:string, password:string) => async (dispa
     return { success: false, message: "Network error" };
   }
 };
-export const logoutThunkCreator = () => async (dispatch) => {
+export const logoutThunkCreator = (): AuthThunk<Promise<{ success: boolean; message?: string }>> => async (dispatch:AuthDispatch) => {
   try {
     const response = await AuthAPI.logoutAPI();
     if (response.data.resultCode === 0) {
