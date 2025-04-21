@@ -1,4 +1,4 @@
-import React, { useState,memo } from "react";
+import React, { useState,memo, FC } from "react";
 import {
   Avatar,
   Typography,
@@ -9,31 +9,35 @@ import {
 } from "@mui/material";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { useDispatch, useSelector } from "react-redux";
-import { handleLikesCount } from "../../../../redux/profile-reducer.ts";
+import { handleLikesCount, ProfileDispatch } from "../../../../redux/profile-reducer.ts";
+import { RootState } from "../../../../redux/redux-store.ts";
 
-const Post = memo((props) =>{
-  const dispatch = useDispatch();
+interface PropsType {
+  id: number;
+}
+
+const Post: FC<PropsType> = memo((props) =>{
+  const dispatch = useDispatch<ProfileDispatch>();
   const { id } = props;
 
-  const post = useSelector((state) =>
+  const post = useSelector((state:RootState) =>
     state.profilePage.posts.find((post) => post.id === id)
-  );
-  const { avatar, user, likes, text } = post;
-  const [likeCount, setLikeCount] = useState(likes);
-  const [liked, setLiked] = useState(false);
+  )!;
 
-  const handleLike = (idOfPost, newLikesCount) => {
+  const { avatar, user, likes, text } =  post
+
+
+  const [likeCount, setLikeCount] = useState<number>(likes);
+  const [liked, setLiked] = useState<boolean>(false);
+
+  const handleLike = (idOfPost:number, newLikesCount:number) => {
     dispatch(handleLikesCount(idOfPost, newLikesCount));
   };
 
-
-
   if (!post) return null;
 
-
-
   const toggleLike = () => {
-    const newLikes = liked ? likeCount - 1 : likeCount + 1;
+    const newLikes:number = liked ? likeCount - 1 : likeCount + 1;
     handleLike(id, newLikes);
     setLikeCount(newLikes);
     setLiked(!liked);

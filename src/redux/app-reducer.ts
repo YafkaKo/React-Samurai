@@ -1,6 +1,9 @@
 import { authThunkCreator } from "./auth-reducer.ts";
 import { ActionType,DispatchConst } from "../types/types.ts";
+import { ThunkAction, ThunkDispatch } from "@reduxjs/toolkit";
+import { RootState } from "./redux-store.ts";
 
+export type AppDispatch = ThunkDispatch<RootState, unknown, ActionType>;
 
 
 type InitialStateType = {
@@ -29,7 +32,7 @@ export const handleInit = (initialized:boolean): ActionType => ({
   initialized
 });
 
-export const initialize = ()=> async (dispatch:any)=>{
+export const initialize = ():ThunkAction<void,RootState,unknown,ActionType>=> async (dispatch:AppDispatch)=>{
     await dispatch(authThunkCreator());
    dispatch(handleInit(true))
 }

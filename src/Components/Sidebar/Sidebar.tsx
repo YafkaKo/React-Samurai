@@ -36,7 +36,7 @@ const links: link[] = [
     },
 ];
 
-const Sidebar : FC<React.Component> = () => {
+const Sidebar : FC = () => {
     return (
         <Box component='nav' sx={{
             p: '15px',

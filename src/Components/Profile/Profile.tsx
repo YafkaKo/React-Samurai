@@ -1,4 +1,4 @@
-import React, { useEffect, memo, useState } from "react";
+import React, { useEffect, memo, useState, FC } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -13,32 +13,36 @@ import {
 import {
   getProfileStatusThunkCreator,
   getProfileThunkCreator,
+  ProfileDispatch,
 } from "../../redux/profile-reducer.ts";
-import ProfileStatus from "./ProfileStatus/ProfileStatus";
+import ProfileStatus from "./ProfileStatus/ProfileStatus.tsx";
 import { createSelector } from "@reduxjs/toolkit";
-import authRedirect from "../../HOC/AuthRedirect";
-import MyPosts from "./MyPosts/MyPosts";
-import ProfileEditMode from "./ProfileEditMode";
-import Contacts from "./Contacts/Contacts";
+import authRedirect from "../../HOC/AuthRedirect.tsx";
+import MyPosts from "./MyPosts/MyPosts.tsx";
+import ProfileEditMode from "./ProfileEditMode.tsx";
+import Contacts from "./Contacts/Contacts.tsx";
+import { RootState } from "../../redux/redux-store.ts";
 
-const Profile = memo(() => {
+const Profile: FC = memo(() => {
   const { idOfUser, profile, status } = useSelector(selectProfileData);
-  let { id } = useParams(); // Получаем id из URL
+  let { id } = useParams<{ id?: string }>(); // Получаем id из URL
   if (!id) {
-    id = idOfUser;
+    id = idOfUser?.toString();
   }
   const [isOwner, setIsOwner] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<ProfileDispatch>();
 
   useEffect(() => {
     if (!idOfUser) {
       navigate("/login");
       return;
     }
-    dispatch(getProfileThunkCreator(id));
-    dispatch(getProfileStatusThunkCreator(id));
-    if (id === idOfUser) {
+    if(id){
+      dispatch(getProfileThunkCreator(id));
+      dispatch(getProfileStatusThunkCreator(id));
+    }
+    if (id === idOfUser.toString()) {
       setIsOwner(true);
     }
   }, [id, dispatch, navigate, idOfUser]); // Зависимости: id, dispatch, navigate, idOfUser
@@ -63,7 +67,6 @@ const Profile = memo(() => {
         {editMode ? (
           <ProfileEditMode
           profile={profile}
-          status={status}
           setEditMode={setEditMode}
         />
         ) : (
@@ -85,7 +88,7 @@ const Profile = memo(() => {
               {profile.lookingForAJob ? (
                 <ListItem sx={{ p: 0, pb: "5px" }}>
                   lookingForAJobDescription:{" "}
-                  {profile.lookingForAJobDescription.toString()}
+                  {profile.lookingForAJobDescription?.toString()}
                 </ListItem>
               ) : null}
               <Contacts contacts={profile.contacts} />
@@ -102,7 +105,7 @@ const Profile = memo(() => {
 });
 
 const selectProfileData = createSelector(
-  [(state) => state.profilePage, (state) => state.auth],
+  [(state:RootState) => state.profilePage, (state:RootState) => state.auth],
   (profilePage, auth) => ({
     idOfUser: auth.id,
     profile: profilePage.profile,

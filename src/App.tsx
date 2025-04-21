@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from "react";
+import React, { FC, Suspense, useEffect } from "react";
 import { Box, CircularProgress, Container } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
 
@@ -7,20 +7,21 @@ import Sidebar from "./Components/Sidebar/Sidebar.tsx";
 
 import Login from "./Components/Login/Login.tsx";
 import { useDispatch, useSelector } from "react-redux";
-import { initialize } from "./redux/app-reducer.ts";
+import { AppDispatch, initialize } from "./redux/app-reducer.ts";
+import { RootState } from "./redux/redux-store.ts";
 
 const DialogsContainer = React.lazy(() =>
-  import("./Components/Dialogs/DialogsContainer")
+  import("./Components/Dialogs/DialogsContainer.tsx")
 );
-const Profile = React.lazy(() => import("./Components/Profile/Profile.jsx"));
+const Profile = React.lazy(() => import("./Components/Profile/Profile.tsx"));
 const UsersContainer = React.lazy(() =>
   import("./Components/Users/UsersContainer.tsx")
 );
 
-function App() {
-  const initialized = useSelector((state) => state.app.initialized);
+const App : FC = ()  =>{
+  const initialized = useSelector((state:RootState) => state.app.initialized);
   // // console.log(initialized + ' '+ new Date().toISOString())
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     dispatch(initialize());

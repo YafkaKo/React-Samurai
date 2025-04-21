@@ -34,7 +34,8 @@ export type PhotoType = {
 };
 
 export type ProfileType = {
-  userId: number;
+  userId: string;
+  aboutMe: string|undefined;
   lookingForAJob: boolean;
   lookingForAJobDescription: string | null;
   fullName: string;

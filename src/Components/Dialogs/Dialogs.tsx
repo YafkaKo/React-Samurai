@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { FC, useEffect } from "react";
 import {
   Avatar,
   Box,
@@ -10,29 +10,37 @@ import {
 } from "@mui/material";
 import MessagesActiveContainer from "./MessagesActive/MessagesActiveContainer.tsx";
 import { useNavigate, useParams } from "react-router-dom";
+import { ChatType } from "../../redux/dialogs-reducer.ts";
 
-export default function Dialogs(props) {
+type PropsType = {
+  chats: ChatType[],
+  isAuth:boolean
+}
+
+const Dialogs: FC<PropsType> = (props) => {
   const { chats, isAuth } = props;
 
   const navigate = useNavigate();
   const { chatId } = useParams();
-  const [chatUser, setChatUser] = React.useState(chatId ? parseInt(chatId) : 0);
+  const [chatUser, setChatUser] = React.useState<number>(chatId ? parseInt(chatId) : 0);
 
-  let activeChat = useRef(null);
+  let activeChat:ChatType|undefined = undefined;
 
   if (typeof chatUser === "number") {
     activeChat = chats.find((chat) => chat.id === chatUser);
   }
 
-  const handleChange = (event, chatUser) => {
+  const handleChange = (event , chatUser:number) => {
     ++chatUser;
     setChatUser(chatUser);
     navigate(`/dialogs/${chatUser}`);
   };
 
-  if (isAuth === false) {
-    navigate(`/login`);
-  }
+  useEffect(()=>{
+    if (isAuth === false) {
+      navigate(`/login`);
+    }
+  },[isAuth,navigate])
 
   return (
     <Box
@@ -104,3 +112,5 @@ export default function Dialogs(props) {
     </Box>
   );
 }
+
+export default Dialogs;

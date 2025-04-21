@@ -1,3 +1,4 @@
+import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import {
   Box,
@@ -7,31 +8,61 @@ import {
   FormControlLabel,
   Input,
 } from "@mui/material";
-import { putProfileThunkCreator } from "../../redux/profile-reducer.ts";
+import {
+  ProfileDispatch,
+  putProfileThunkCreator,
+} from "../../redux/profile-reducer.ts";
 import { useDispatch } from "react-redux";
+import { Dispatch, FC, SetStateAction } from "react";
+import { ContactType, ProfileType } from "../../types/types.ts";
 
-const ProfileEditMode = ({ profile, setEditMode }) => {
+type PropsType = {
+  profile: ProfileType;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+};
 
-  const safeContacts = () => {
-    try {
-      if (!profile || !profile.contacts) return {};
+type FormData = {
+  fullName: string;
+  aboutMe: string;
+  lookingForAJob: boolean;
+  lookingForAJobDescription: string;
+  contacts: ContactType;
+};
 
-      // Создаем копию контактов, фильтруя null/undefined
-      return Object.entries(profile.contacts).reduce((acc, [key, value]) => {
-        if (key) { // Проверяем, что ключ существует
-          acc[key] = value || ""; // Заменяем null/undefined на пустую строку
-        }
-        return acc;
-      }, {});
-    } catch (error) {
-      console.error("Error processing contacts:", error);
-      return {};
-    }
+const ProfileEditMode: FC<PropsType> = ({ profile, setEditMode }) => {
+  const safeContacts = (): ContactType => {
+
+    const defaultContacts: ContactType = {
+      github: "",
+      vk: "",
+      facebook: "",
+      instagram: "",
+      twitter: "",
+      website: "",
+      youtube: "",
+      mainLink: "",
+    };
+
+    // Если у нас нет profile.contacts — возвращаем всё по умолчанию
+    if (!profile.contacts) return defaultContacts;
+
+    // Клонируем defaultContacts, потом перезапишем реальными строками или пустыми
+    const contacts: ContactType = { ...defaultContacts };
+
+    (Object.keys(defaultContacts) as Array<keyof ContactType>).forEach(
+      (key) => {
+        const raw = profile.contacts![key];
+        // raw может быть string | null | undefined — приводим к string
+        contacts[key] = raw ?? "";
+      }
+    );
+
+    return contacts;
   };
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<ProfileDispatch>();
 
-  const { control, handleSubmit, watch } = useForm({
+  const { control, handleSubmit, watch } = useForm<FormData>({
     defaultValues: {
       fullName: profile.fullName || "",
       aboutMe: profile.aboutMe || "",
@@ -43,9 +74,8 @@ const ProfileEditMode = ({ profile, setEditMode }) => {
 
   const lookingForAJob = watch("lookingForAJob");
 
-  const onSubmit = async (data)  => {
-
-    const originalProfile = {
+  const onSubmit = async (data: FormData) => {
+    const originalProfile: FormData = {
       fullName: profile.fullName || "",
       aboutMe: profile.aboutMe || "",
       lookingForAJob: profile.lookingForAJob || false,
@@ -53,7 +83,7 @@ const ProfileEditMode = ({ profile, setEditMode }) => {
       contacts: safeContacts(),
     };
 
-    const hasChanges = (obj1, obj2) => {
+    const hasChanges = (obj1:FormData, obj2:FormData):boolean => {
       const keys = new Set([...Object.keys(obj1), ...Object.keys(obj2)]);
 
       for (const key of keys) {
@@ -61,8 +91,8 @@ const ProfileEditMode = ({ profile, setEditMode }) => {
         const val2 = obj2[key];
 
         // Нормализация значений для сравнения
-        const normalizedVal1 = typeof val1 === 'string' ? val1.trim() : val1;
-        const normalizedVal2 = typeof val2 === 'string' ? val2.trim() : val2;
+        const normalizedVal1 = typeof val1 === "string" ? val1.trim() : val1;
+        const normalizedVal2 = typeof val2 === "string" ? val2.trim() : val2;
 
         if (JSON.stringify(normalizedVal1) !== JSON.stringify(normalizedVal2)) {
           return true;
@@ -71,19 +101,19 @@ const ProfileEditMode = ({ profile, setEditMode }) => {
       return false;
     };
     if (!hasChanges(data, originalProfile)) {
-      console.log('Данные не изменились');
+      console.log("Данные не изменились");
       setEditMode(false);
       return;
     }
 
     try {
-      // Ждем завершения dispatch
-      await dispatch(putProfileThunkCreator({ ...data, userId: profile.userId }));
+      let profileExample: ProfileType = { userId: profile.userId, ...data };
+      await dispatch(putProfileThunkCreator(profileExample));
 
       // Только после успешного выполнения
       setEditMode(false);
     } catch (error) {
-      console.error('Ошибка при сохранении:', error);
+      console.error("Ошибка при сохранении:", error);
       // Можно добавить обработку ошибки (например, показать уведомление)
     }
   };
@@ -96,8 +126,8 @@ const ProfileEditMode = ({ profile, setEditMode }) => {
           <Input
             {...field}
             fullWidth
-            sx={{mb:1 , flex: 1 }}
-            placeholder='Full Name'
+            sx={{ mb: 1, flex: 1 }}
+            placeholder="Full Name"
             inputProps={{
               "aria-label": "Full Name",
             }}
@@ -105,20 +135,19 @@ const ProfileEditMode = ({ profile, setEditMode }) => {
         )}
       />
 
-
       <Controller
         name="aboutMe"
         control={control}
         render={({ field }) => (
           <Input
-          placeholder='About Me'
-          {...field}
-          fullWidth
-          sx={{flex: 1 }}
-          inputProps={{
-            "aria-label": "About Me",
-          }}
-        />
+            placeholder="About Me"
+            {...field}
+            fullWidth
+            sx={{ flex: 1 }}
+            inputProps={{
+              "aria-label": "About Me",
+            }}
+          />
         )}
       />
 
@@ -145,15 +174,15 @@ const ProfileEditMode = ({ profile, setEditMode }) => {
           control={control}
           render={({ field }) => (
             <Input
-          placeholder='Job Description'
-          {...field}
-          fullWidth
-          sx={{flex: 1 }}
-          rows={2}
-          inputProps={{
-            "aria-label": "Job Description",
-          }}
-        />
+              placeholder="Job Description"
+              {...field}
+              fullWidth
+              sx={{ flex: 1 }}
+              rows={2}
+              inputProps={{
+                "aria-label": "Job Description",
+              }}
+            />
           )}
         />
       )}
@@ -164,18 +193,18 @@ const ProfileEditMode = ({ profile, setEditMode }) => {
       {Object.keys(profile.contacts || {}).map((contact) => (
         <Controller
           key={contact}
-          name={`contacts.${contact}`}
+          name={`contacts.${contact}`as `contacts.${keyof ContactType}`}
           control={control}
           render={({ field }) => (
             <Input
-          placeholder={contact}
-          {...field}
-          fullWidth
-          sx={{flex: 1, mb:1 }}
-          inputProps={{
-            "aria-label": {contact},
-          }}
-        />
+              placeholder={contact}
+              {...field}
+              fullWidth
+              sx={{ flex: 1, mb: 1 }}
+              inputProps={{
+                "aria-label": contact,
+              }}
+            />
           )}
         />
       ))}

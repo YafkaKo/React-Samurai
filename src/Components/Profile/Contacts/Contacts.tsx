@@ -1,8 +1,13 @@
 import { Box, List, ListItem, Typography } from "@mui/material";
-import React from "react";
+import React, { FC } from "react";
 import { Link } from "react-router-dom";
+import { ContactType } from "../../../types/types";
 
-const Contacts = (props) => {
+interface PropsType {
+  contacts: ContactType|undefined
+}
+
+const Contacts: FC<PropsType> = (props) => {
   const { contacts } = props;
   return (
     <Box>
@@ -16,7 +21,7 @@ const Contacts = (props) => {
         }
         return (
           <ListItem key={key}>
-            <Typography variant='p' >{key} : <Link color='pallete.primary'  to={contactUrl}>{contactUrl}</Link></Typography>
+            <Typography component='p' >{key} : <Link color='pallete.primary'  to={contactUrl}>{contactUrl}</Link></Typography>
           </ListItem>
         );
       })

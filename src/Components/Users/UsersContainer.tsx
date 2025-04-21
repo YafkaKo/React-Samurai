@@ -6,7 +6,7 @@ import {
   handleCurrentPage,
 } from '../../redux/users-reducer.ts';
 import Users from './Users.tsx';
-import authRedirect from '../../HOC/AuthRedirect.js';
+import authRedirect from '../../HOC/AuthRedirect.tsx';
 import { RootState } from '../../redux/redux-store.ts';
 import { UsersDispatch } from '../../redux/users-reducer.ts';
 import { UsersPropsType } from '../../types/types.ts';

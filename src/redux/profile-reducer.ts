@@ -1,7 +1,8 @@
 import { ProfileAPI } from "../API/API";
-import { Dispatch } from "react";
 import { PostType,ProfileType } from "../types/types";
 import { ActionType,DispatchConst } from "../types/types.ts";
+import { ThunkAction, ThunkDispatch } from "@reduxjs/toolkit";
+import { RootState } from "./redux-store.ts";
 
 
 const initialState = {
@@ -13,7 +14,14 @@ const initialState = {
 
 type InitialStateType = typeof initialState
 
+export type ProfileDispatch = ThunkDispatch<RootState, unknown, ActionType>;
 
+type ProfileThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  ActionType
+>;
 
 const profileReducer = (state = initialState, action: ActionType):InitialStateType => {
   switch (action.type) {
@@ -70,18 +78,17 @@ export const handlePost = (newPost:PostType):ActionType => ({
 });
 
 export const handleFetching = (isFetching:boolean):ActionType => ({
-  type: DispatchConst.SET_FETCHING,
+  type: DispatchConst.SET_PROFILE_FETCHING,
   isFetching,
 });
-
 export const handleLikesCount = (idOfPost:number, newLikesCount:number):ActionType => ({
   type: DispatchConst.SET_LIKE_COUNT,
   idOfPost,
   newLikesCount,
 });
 
-export const getProfileThunkCreator = (id: number) => {
-  return async (dispatch: Dispatch<ActionType>) => {
+export const getProfileThunkCreator = (id: string): ProfileThunk => {
+  return async (dispatch: ProfileDispatch) => {
     if (id) {
       dispatch(handleFetching(true)); // Устанавливаем состояние загрузки
       try {
@@ -96,8 +103,8 @@ export const getProfileThunkCreator = (id: number) => {
   };
 };
 
-export const getProfileStatusThunkCreator = (id: number) => {
-  return async (dispatch: Dispatch<ActionType>) => {
+export const getProfileStatusThunkCreator = (id: string): ProfileThunk => {
+  return async (dispatch: ProfileDispatch) => {
     if (id) {
       dispatch(handleFetching(true)); // Устанавливаем состояние загрузки
       const response = await ProfileAPI.getStatusAPI(id);
@@ -112,8 +119,8 @@ export const getProfileStatusThunkCreator = (id: number) => {
   };
 };
 
-export const setProfileStatusThunkCreator = (id: number) => {
-  return async (dispatch:Dispatch<ActionType>) => {
+export const setProfileStatusThunkCreator = (id: string): ProfileThunk => {
+  return async (dispatch: ProfileDispatch) => {
     const response = await ProfileAPI.setStatusAPI(id);
     try {
       dispatch(handleStatus(response.data)); // Передаем данные профиля в Redux
@@ -123,7 +130,8 @@ export const setProfileStatusThunkCreator = (id: number) => {
   };
 };
 
-export const putProfileThunkCreator = (profile:ProfileType) => async (dispatch: Dispatch<any>) => {
+export const putProfileThunkCreator = (profile:ProfileType): ProfileThunk =>
+  async (dispatch: ProfileDispatch) => {
   const response = await ProfileAPI.putProfileAPI(profile);
   if (response.data.resultCode === 1 || response.data.data.length === 0) {
     return;

@@ -1,16 +1,20 @@
 import { Input, ListItem, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { ChangeEvent, FC, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setProfileStatusThunkCreator } from "../../../redux/profile-reducer.ts";
+import { ProfileDispatch, setProfileStatusThunkCreator } from "../../../redux/profile-reducer.ts";
 
-const ProfileStatus = (props) => {
+interface PropsType {
+  status: string|null;
+}
+
+const ProfileStatus: FC<PropsType> = (props) => {
   const { status } = props;
 
-  const dispatch = useDispatch();
-  const [editMode, setEditMode] = useState(false);
-  const [inputValue, setInputValue] = useState(status);
+  const dispatch = useDispatch<ProfileDispatch>();
+  const [editMode, setEditMode] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState<string|null>(status);
 
-  const handleInput = (e) => {
+  const handleInput = (e:ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
@@ -20,6 +24,7 @@ const ProfileStatus = (props) => {
 
   const deactivateEditMode = () => {
     setEditMode(false);
+    if(inputValue)
     dispatch(setProfileStatusThunkCreator(inputValue));
   };
 

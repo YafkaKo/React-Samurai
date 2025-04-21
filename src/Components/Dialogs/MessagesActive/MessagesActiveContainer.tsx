@@ -7,21 +7,26 @@ import {
   MessageType,
 } from "../../../redux/dialogs-reducer.ts";
 import { RootState } from "../../../redux/redux-store.ts";
+import { ActionType } from "../../../types/types.ts";
 
-type PropsTypeToState = {
+type OwnProps = {
   activeChat: ChatType;
   count: number;
 };
 
-type PropsType = {
-  activeChat: ChatType;
+type StateProps = {
+  activeChat: ChatType,
   messages: MessageType[];
+};
+
+type DispatchProps = {
+  handleMessage: (idOfUser: number, newMessage: MessageType) => ActionType;
 };
 
 const mapStateToProps = (
   state: RootState,
-  props: PropsTypeToState
-): PropsType => {
+  props: OwnProps
+): StateProps => {
   const { activeChat, count } = props;
 
   return {
@@ -30,17 +35,14 @@ const mapStateToProps = (
   };
 };
 
-const mapDispatchesToProps = (dispatch: any): object => {
-  return {
-    handleMessage: (idOfUser: number, newMessage: MessageType) => {
-      dispatch(addMessageActionCreator(newMessage, idOfUser));
-    },
-  };
+const mapDispatchToProps: DispatchProps = {
+  handleMessage: (idOfUser, newMessage) =>
+    addMessageActionCreator(newMessage, idOfUser),
 };
 
-const MessagesActiveContainer = connect(
+const MessagesActiveContainer = connect<StateProps, DispatchProps, OwnProps, RootState>(
   mapStateToProps,
-  mapDispatchesToProps
+  mapDispatchToProps
 )(MessagesActive);
 
 export default MessagesActiveContainer;

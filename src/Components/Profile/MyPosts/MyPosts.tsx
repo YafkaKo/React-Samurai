@@ -1,4 +1,4 @@
-import React, { useState,memo } from "react";
+import React, { useState,memo, KeyboardEvent, FormEvent } from "react";
 import SendIcon from "@mui/icons-material/Send";
 import {
   Box,
@@ -10,26 +10,28 @@ import {
 } from "@mui/material";
 import { handlePost } from "../../../redux/profile-reducer.ts";
 import { useDispatch, useSelector } from "react-redux";
-import Post from "./Post/Post";
+import Post from "./Post/Post.tsx";
+import { RootState } from "../../../redux/redux-store.ts";
+import { PostType } from "../../../types/types.ts";
 
-const MyPosts = memo((props) => {
+const MyPosts: React.FC = memo((props) => {
   const dispatch = useDispatch();
-  const posts = useSelector((state) => state.profilePage.posts);
+  const posts = useSelector((state: RootState) => state.profilePage.posts);
 
-  const handlePostAction = (newPost) => {
+  const handlePostAction = (newPost:PostType) => {
     dispatch(handlePost(newPost));
   };
 
-  const [newPostText, setNewPostText] = useState("");
+  const [newPostText, setNewPostText] = useState<string>("");
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendPost();
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e:FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     sendPost();
   };
@@ -37,7 +39,7 @@ const MyPosts = memo((props) => {
   const sendPost = () => {
     if (!newPostText.trim()) return;
 
-    let newElement = {
+    let newElement:PostType = {
       id: posts.length + 1,
       user: "Ivan",
       avatar: "I",

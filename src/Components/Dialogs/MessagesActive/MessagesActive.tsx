@@ -13,6 +13,7 @@ interface PropsType {
 const MessagesActive: FC<PropsType> = (props) => {
     const { messages, handleMessage, activeChat,
          } = props
+
     const [newMessageText,setNewMessageText] = useState<string>('')
     const handleKeyPress = (e: KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === 'Enter' && !e.shiftKey) {
