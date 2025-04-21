@@ -1,5 +1,5 @@
 import { ThunkAction, ThunkDispatch } from "@reduxjs/toolkit";
-import { AuthAPI } from "../API/API";
+import { AuthAPI, ResultCodeEnum } from "../API/API.ts";
 import { RootState } from "./redux-store";
 import { ActionType,DispatchConst } from "../types/types.ts";
 
@@ -54,7 +54,7 @@ export const handleAuth = (id:number|null, login:string|null, email:string|null,
 export const authThunkCreator = (): AuthThunk<Promise<{ success: boolean } | undefined>> => async (dispatch:AuthDispatch) => {
   try{
     const response = await AuthAPI.me()
-    if (response.data.resultCode === 0) {
+    if (response.data.resultCode === ResultCodeEnum.Success && response.data.data) {
       const { id, login, email } = response.data.data;
       dispatch(handleAuth(id, login, email, true));
       return { success: true };
@@ -64,7 +64,8 @@ export const authThunkCreator = (): AuthThunk<Promise<{ success: boolean } | und
   }
 };
 
-export const loginThunkCreator = (email:string, password:string): AuthThunk<Promise<{ success: boolean; message?: string }>> => async (dispatch:AuthDispatch) => {
+export const loginThunkCreator = (email:string, password:string): AuthThunk<Promise<{ success: boolean; message?: string }>> =>
+   async (dispatch) => {
   try {
     const response = await AuthAPI.loginAPI(email, password);
 
@@ -84,10 +85,10 @@ export const loginThunkCreator = (email:string, password:string): AuthThunk<Prom
     return { success: false, message: "Network error" };
   }
 };
-export const logoutThunkCreator = (): AuthThunk<Promise<{ success: boolean; message?: string }>> => async (dispatch:AuthDispatch) => {
+export const logoutThunkCreator = (): AuthThunk<Promise<{ success: boolean; message?: string }>> => async (dispatch) => {
   try {
     const response = await AuthAPI.logoutAPI();
-    if (response.data.resultCode === 0) {
+    if (response.data.resultCode === ResultCodeEnum.Success) {
       dispatch(handleAuth(null, null, null, false));
       return { success: true };
     } else {

@@ -1,4 +1,4 @@
-import UsersAPI from "../API/API";
+import UsersAPI from "../API/API.ts";
 import { UserType } from "../types/types";
 import { ThunkAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "./redux-store";
@@ -129,17 +129,19 @@ export const getUsersThunkCreator = (
   currentPage: number,
   usersPerPage: number
 ): UsersThunk => {
-  return async (dispatch: UsersDispatch) => {
+  return async (dispatch) => {
     dispatch(handleFetching(true));
     const response = await UsersAPI.getUsersAPI({ currentPage, usersPerPage });
     dispatch(handleFetching(false));
     dispatch(handleUsers(response.items));
-    dispatch(handlePagination(usersPerPage, response.totalCount)); // Передаем общее количество пользователей
+    if(response.totalCount){
+      dispatch(handlePagination(usersPerPage, response.totalCount)); // Передаем общее количество пользователей
+    }
   };
 };
 
-export const followUsersThunkCreator = (id: number, followed: boolean) => {
-  return async (dispatch: UsersDispatch) => {
+export const followUsersThunkCreator = (id: number, followed: boolean):UsersThunk => {
+  return async (dispatch) => {
     dispatch(handleFollowingProgress(true, id));
     try {
       const apiMethod = followed

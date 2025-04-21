@@ -32,7 +32,7 @@ export const handleInit = (initialized:boolean): ActionType => ({
   initialized
 });
 
-export const initialize = ():ThunkAction<void,RootState,unknown,ActionType>=> async (dispatch:AppDispatch)=>{
+export const initialize = ():ThunkAction<void,RootState,unknown,ActionType>=> async (dispatch)=>{
     await dispatch(authThunkCreator());
    dispatch(handleInit(true))
 }
