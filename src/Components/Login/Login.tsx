@@ -63,7 +63,6 @@ const Login:FC = () => {
         setOpenSnackbar(true);
         setTimeout(() => navigate("/profile"), 3000);
     } else {
-      // Показать ошибку пользователю
       setAuthError(result.message);
     }
   };

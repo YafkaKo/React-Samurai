@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import {
   getUsersThunkCreator,
-  handleCurrentPage,
+  actionsUsers,
 } from '../../redux/users-reducer.ts';
 import Users from './Users.tsx';
 import authRedirect from '../../HOC/AuthRedirect.tsx';
@@ -35,7 +35,7 @@ const UsersContainer: FC = () => {
 
   const usersProps:UsersPropsType = {
     ...usersData,
-    handleCurrentPage: (page:number) => dispatch(handleCurrentPage(page)),
+    handleCurrentPage: (page:number) => dispatch(actionsUsers.handleCurrentPage(page)),
   };
 
   return <Users {...usersProps} />;

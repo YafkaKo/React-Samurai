@@ -8,7 +8,7 @@ import {
   TextareaAutosize,
   Typography,
 } from "@mui/material";
-import { handlePost } from "../../../redux/profile-reducer.ts";
+import { actionsProfile } from "../../../redux/profile-reducer.ts";
 import { useDispatch, useSelector } from "react-redux";
 import Post from "./Post/Post.tsx";
 import { RootState } from "../../../redux/redux-store.ts";
@@ -19,7 +19,7 @@ const MyPosts: React.FC = memo((props) => {
   const posts = useSelector((state: RootState) => state.profilePage.posts);
 
   const handlePostAction = (newPost:PostType) => {
-    dispatch(handlePost(newPost));
+    dispatch(actionsProfile.handlePost(newPost));
   };
 
   const [newPostText, setNewPostText] = useState<string>("");

@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { useDispatch, useSelector } from "react-redux";
-import { handleLikesCount, ProfileDispatch } from "../../../../redux/profile-reducer.ts";
+import { actionsProfile, ProfileDispatch } from "../../../../redux/profile-reducer.ts";
 import { RootState } from "../../../../redux/redux-store.ts";
 
 interface PropsType {
@@ -31,7 +31,7 @@ const Post: FC<PropsType> = memo((props) =>{
   const [liked, setLiked] = useState<boolean>(false);
 
   const handleLike = (idOfPost:number, newLikesCount:number) => {
-    dispatch(handleLikesCount(idOfPost, newLikesCount));
+    dispatch(actionsProfile.handleLikesCount(idOfPost, newLikesCount));
   };
 
   if (!post) return null;

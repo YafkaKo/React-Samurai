@@ -1,4 +1,4 @@
-import { ActionType,DispatchConst } from "../types/types.ts";
+import { InferActionsTypes } from "./redux-store.ts";
 
 export type MessageType = {
   id: number,
@@ -17,6 +17,8 @@ export type ChatType ={
 type InitialStateType = {
   chats: ChatType[]
 }
+
+export type ActionTypesDialogs = InferActionsTypes<typeof actionsDilogs>
 
 
 const initialState: InitialStateType = {
@@ -340,9 +342,9 @@ const initialState: InitialStateType = {
 }
 
 
-const dialogsReducer = (state = initialState, action:ActionType):InitialStateType => {
+const dialogsReducer = (state = initialState, action:ActionTypesDialogs):InitialStateType => {
   switch (action.type) {
-    case DispatchConst.ADD_MESSAGE:
+    case 'ADD_MESSAGE':
       console.log('ADD_MESSAGE')
       return {
         ...state,
@@ -360,8 +362,9 @@ const dialogsReducer = (state = initialState, action:ActionType):InitialStateTyp
       return state;
   }
 }
-
-export const addMessageActionCreator = (newMessage:MessageType, idOfUser:number):ActionType =>
-  ({ type: DispatchConst.ADD_MESSAGE, idOfUser, newMessage })
+export const actionsDilogs = {
+handleMessage: (newMessage:MessageType, idOfUser:number) =>
+  ({ type: 'ADD_MESSAGE', idOfUser, newMessage } as const )
+}
 
 export default dialogsReducer

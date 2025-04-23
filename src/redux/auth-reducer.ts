@@ -1,7 +1,6 @@
 import { ThunkAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { AuthAPI, ResultCodeEnum } from "../API/API.ts";
-import { RootState } from "./redux-store";
-import { ActionType,DispatchConst } from "../types/types.ts";
+import { InferActionsTypes, RootState } from "./redux-store";
 
 
 type initialStateType = {
@@ -13,9 +12,11 @@ type initialStateType = {
 
 export type AuthStateType = initialStateType
 
-export type AuthDispatch = ThunkDispatch<RootState, unknown, ActionType>;
+type ActionTypesAuth = InferActionsTypes<typeof actionsAuth>
 
-type AuthThunk<ReturnType = void> =ThunkAction<ReturnType, RootState, unknown, ActionType>;
+export type AuthDispatch = ThunkDispatch<RootState, unknown, ActionTypesAuth>;
+
+type AuthThunk<ReturnType = void> =ThunkAction<ReturnType, RootState, unknown, ActionTypesAuth>;
 
 
 const initialState: initialStateType = {
@@ -27,36 +28,32 @@ const initialState: initialStateType = {
 
 
 
-const authReducer = (state:initialStateType = initialState, action:ActionType):initialStateType => {
+const authReducer = (state:initialStateType = initialState, action:ActionTypesAuth):initialStateType => {
   switch (action.type) {
-    case DispatchConst.SET_USER_DATA:
+    case 'SET_USER_DATA':
       return {
         ...state,
         ...action.data,
         isAuth: action.data?.isAuth ?? true
       };
-    case DispatchConst.SET_AUTH:
-      return {
-        ...state,
-        isAuth: false,
-      };
-
     default:
       return state;
   }
 };
 
-export const handleAuth = (id:number|null, login:string|null, email:string|null, isAuth:boolean):ActionType => ({
-  type: DispatchConst.SET_USER_DATA,
+export const actionsAuth = {
+handleAuth: (id:number|null, login:string|null, email:string|null, isAuth:boolean) => ({
+  type: 'SET_USER_DATA',
   data: { id, email, login, isAuth },
-});
+}as const ),
+}
 
 export const authThunkCreator = (): AuthThunk<Promise<{ success: boolean } | undefined>> => async (dispatch:AuthDispatch) => {
   try{
     const response = await AuthAPI.me()
     if (response.data.resultCode === ResultCodeEnum.Success && response.data.data) {
       const { id, login, email } = response.data.data;
-      dispatch(handleAuth(id, login, email, true));
+      dispatch(actionsAuth.handleAuth(id, login, email, true));
       return { success: true };
     }
   } catch(error){
@@ -71,7 +68,7 @@ export const loginThunkCreator = (email:string, password:string): AuthThunk<Prom
 
     if (response.data.resultCode === 0) {
       // const { id, login, email: userEmail } = response.data.data;
-      // dispatch(handleAuth(id, login, userEmail));
+      // dispatch(actionsAuth.handleAuth(id, login, userEmail));
       dispatch(authThunkCreator());
       return { success: true };
     } else {
@@ -89,7 +86,7 @@ export const logoutThunkCreator = (): AuthThunk<Promise<{ success: boolean; mess
   try {
     const response = await AuthAPI.logoutAPI();
     if (response.data.resultCode === ResultCodeEnum.Success) {
-      dispatch(handleAuth(null, null, null, false));
+      dispatch(actionsAuth.handleAuth(null, null, null, false));
       return { success: true };
     } else {
       return {

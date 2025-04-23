@@ -16,4 +16,8 @@ const rootReducer = combineReducers({
 export type RootState = ReturnType<typeof rootReducer>;
 const store = configureStore({ reducer: rootReducer })
 
+type PropsTypes<T> = T extends {[key:string]: infer U }? U: never
+
+export type InferActionsTypes<T extends {[key:string]: (...args:any[])=>any }> = ReturnType<PropsTypes<T>>
+
 export default store

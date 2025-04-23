@@ -1,50 +1,53 @@
 import { ProfileAPI } from "../API/API.ts";
-import { PostType,ProfileType } from "../types/types";
-import { ActionType,DispatchConst } from "../types/types.ts";
+import { PostType, ProfileType } from "../types/types";
 import { ThunkAction, ThunkDispatch } from "@reduxjs/toolkit";
-import { RootState } from "./redux-store.ts";
-
+import { InferActionsTypes, RootState } from "./redux-store.ts";
 
 const initialState = {
   posts: [] as PostType[],
-  profile: null as ProfileType|null,
+  profile: null as ProfileType | null,
   isFetching: false as boolean,
-  status: null as string|null,
+  status: null as string | null,
 };
 
-type InitialStateType = typeof initialState
+type InitialStateType = typeof initialState;
 
-export type ProfileDispatch = ThunkDispatch<RootState, unknown, ActionType>;
+type ActionTypesProfile = InferActionsTypes<typeof actionsProfile>;
+
+export type ProfileDispatch = ThunkDispatch<RootState, unknown, ActionTypesProfile>;
 
 type ProfileThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,
   unknown,
-  ActionType
+  ActionTypesProfile
 >;
 
-const profileReducer = (state = initialState, action: ActionType):InitialStateType => {
+const profileReducer = (
+  state = initialState,
+  action: ActionTypesProfile
+): InitialStateType => {
   switch (action.type) {
-    case DispatchConst.SET_PROFILE:
+    case "SET_PROFILE":
       return {
         ...state,
         profile: action.profile,
       };
-    case DispatchConst.SET_STATUS:
+    case "SET_STATUS":
       return {
         ...state,
         status: action.status,
       };
 
-    case DispatchConst.ADD_POST:
+    case "ADD_POST":
       return {
         ...state,
         posts: [...state.posts, action.newPost],
       };
-    case DispatchConst.SET_LIKE_COUNT:
+    case "SET_LIKE_COUNT":
       return {
         ...state,
-        posts: state.posts.map((post:PostType) =>
+        posts: state.posts.map((post: PostType) =>
           post.id === action.idOfPost
             ? {
                 ...post,
@@ -53,7 +56,7 @@ const profileReducer = (state = initialState, action: ActionType):InitialStateTy
             : post
         ),
       };
-    case DispatchConst.SET_PROFILE_FETCHING:
+    case "SET_PROFILE_FETCHING":
       return {
         ...state,
         isFetching: action.isFetching,
@@ -64,40 +67,42 @@ const profileReducer = (state = initialState, action: ActionType):InitialStateTy
   }
 };
 
-export const handleProfile = (profile:ProfileType):ActionType => ({
-  type: DispatchConst.SET_PROFILE,
-  profile,
-});
-export const handleStatus = (status:string|null):ActionType => ({
-  type: DispatchConst.SET_STATUS,
-  status,
-});
-export const handlePost = (newPost:PostType):ActionType => ({
-  type: DispatchConst.ADD_POST,
-  newPost,
-});
+export const actionsProfile = {
+  handleProfile: (profile: ProfileType) => ({
+    type: "SET_PROFILE",
+    profile,
+  } as const),
+  handleStatus: (status: string | null) => ({
+    type: "SET_STATUS",
+    status,
+  } as const),
+  handlePost: (newPost: PostType) => ({
+    type: "ADD_POST",
+    newPost,
+  } as const),
 
-export const handleFetching = (isFetching:boolean):ActionType => ({
-  type: DispatchConst.SET_PROFILE_FETCHING,
-  isFetching,
-});
-export const handleLikesCount = (idOfPost:number, newLikesCount:number):ActionType => ({
-  type: DispatchConst.SET_LIKE_COUNT,
-  idOfPost,
-  newLikesCount,
-});
+  handleFetching: (isFetching: boolean) => ({
+    type: "SET_PROFILE_FETCHING",
+    isFetching,
+  } as const),
+  handleLikesCount: (idOfPost: number, newLikesCount: number) => ({
+    type: "SET_LIKE_COUNT",
+    idOfPost,
+    newLikesCount,
+  } as const),
+};
 
 export const getProfileThunkCreator = (id: string): ProfileThunk => {
   return async (dispatch) => {
     if (id) {
-      dispatch(handleFetching(true)); // Устанавливаем состояние загрузки
+      dispatch(actionsProfile.handleFetching(true)); // Устанавливаем состояние загрузки
       try {
         const response = await ProfileAPI.getProfileAPI(id);
-        dispatch(handleProfile(response.data)); // Передаем данные профиля в Redux
-        dispatch(handleFetching(false)); // Убираем состояние загрузки
+        dispatch(actionsProfile.handleProfile(response.data)); // Передаем данные профиля в Redux
+        dispatch(actionsProfile.handleFetching(false)); // Убираем состояние загрузки
       } catch (error) {
         console.error("Error fetching profile:", error);
-        dispatch(handleFetching(false)); // Убираем состояние загрузки в случае ошибки
+        dispatch(actionsProfile.handleFetching(false)); // Убираем состояние загрузки в случае ошибки
       }
     }
   };
@@ -106,14 +111,14 @@ export const getProfileThunkCreator = (id: string): ProfileThunk => {
 export const getProfileStatusThunkCreator = (id: string): ProfileThunk => {
   return async (dispatch) => {
     if (id) {
-      dispatch(handleFetching(true)); // Устанавливаем состояние загрузки
+      dispatch(actionsProfile.handleFetching(true)); // Устанавливаем состояние загрузки
       const response = await ProfileAPI.getStatusAPI(id);
       try {
-        dispatch(handleStatus(response.data)); // Передаем данные профиля в Redux
-        dispatch(handleFetching(false)); // Убираем состояние загрузки
+        dispatch(actionsProfile.handleStatus(response.data)); // Передаем данные профиля в Redux
+        dispatch(actionsProfile.handleFetching(false)); // Убираем состояние загрузки
       } catch (error) {
         console.error("Error fetching profile:", error);
-        dispatch(handleFetching(false)); // Убираем состояние загрузки в случае ошибки
+        dispatch(actionsProfile.handleFetching(false)); // Убираем состояние загрузки в случае ошибки
       }
     }
   };
@@ -123,24 +128,25 @@ export const setProfileStatusThunkCreator = (id: string): ProfileThunk => {
   return async (dispatch) => {
     const response = await ProfileAPI.setStatusAPI(id);
     try {
-      dispatch(handleStatus(response.data)); // Передаем данные профиля в Redux
+      dispatch(actionsProfile.handleStatus(response.data)); // Передаем данные профиля в Redux
     } catch (error) {
       console.error("Error fetching profile:", error);
     }
   };
 };
 
-export const putProfileThunkCreator = (profile:ProfileType): ProfileThunk =>
+export const putProfileThunkCreator =
+  (profile: ProfileType): ProfileThunk =>
   async (dispatch) => {
-  const response = await ProfileAPI.putProfileAPI(profile);
-  if (response.data.resultCode === 1 || response.data.data.length === 0) {
-    return;
-  }
-  try {
-    dispatch(getProfileThunkCreator(profile.userId)); // Передаем данные профиля в Redux
-  } catch (error) {
-    console.error("Error fetching profile:", error);
-  }
-};
+    const response = await ProfileAPI.putProfileAPI(profile);
+    if (response.data.resultCode === 1 || response.data.data.length === 0) {
+      return;
+    }
+    try {
+      dispatch(getProfileThunkCreator(profile.userId)); // Передаем данные профиля в Redux
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+    }
+  };
 
 export default profileReducer;
