@@ -27,7 +27,7 @@ type AuthMeType = {
   messages: Array<string>
 };
 
-type ResultType = {
+export type ResultType = {
   resultCode: ResultCodeEnum,
   messages: Array<string>,
   data: object
@@ -51,13 +51,9 @@ const UsersAPI = {
   },
   async unFollowUsersAPI(userId: number) {
     return instance
-      .delete<ResultType>(`follow/${userId}`) // Changed from POST to DELETE
+      .delete<ResultType>(`foll ow/${userId}`) // Changed from POST to DELETE
       .then((response) => response.data);
   },
-
-  // async getStatusAPI(id: string) {
-  //   return instance.get(`profile/status/${id}`);
-  // },
 };
 export const ProfileAPI = {
   async getProfileAPI(id: string) {

@@ -20,7 +20,6 @@ const UsersContainer = React.lazy(() =>
 
 const App : FC = ()  =>{
   const initialized = useSelector((state:RootState) => state.app.initialized);
-  // // console.log(initialized + ' '+ new Date().toISOString())
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {

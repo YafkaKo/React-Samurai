@@ -1,25 +1,20 @@
 import { authThunkCreator } from "./auth-reducer.ts";
-import { ThunkAction, ThunkDispatch } from "@reduxjs/toolkit";
-import { InferActionsTypes, RootState } from "./redux-store.ts";
+import {
+  InferActionsTypes,
+  ThunkActionType,
+  ThunkDispatchType,
+} from "./redux-store.ts";
 
-type ActionTypesApp = InferActionsTypes<typeof actionsApp>
-
-export type AppDispatch = ThunkDispatch<RootState, unknown, ActionTypesApp>;
-
-
-type InitialStateType = {
-  initialized: boolean
-}
-
-const initialState: InitialStateType = {
+const initialState = {
   initialized: false,
 };
 
-
-
-const appReducer = (state:InitialStateType = initialState, action:ActionTypesApp):InitialStateType => {
+const appReducer = (
+  state: InitialStateType = initialState,
+  action: ActionTypesApp
+): InitialStateType => {
   switch (action.type) {
-    case 'SET_INIT':
+    case "SET_INIT":
       return {
         ...state,
         initialized: action.initialized,
@@ -31,15 +26,23 @@ const appReducer = (state:InitialStateType = initialState, action:ActionTypesApp
 };
 
 export const actionsApp = {
-handleInit: (initialized:boolean) => ({
-  type: 'SET_INIT',
-  initialized
-})
-}
+  handleInit: (initialized: boolean) => ({
+    type: "SET_INIT",
+    initialized,
+  }),
+};
 
-export const initialize = ():ThunkAction<void,RootState,unknown,ActionTypesApp>=> async (dispatch)=>{
-    await dispatch(authThunkCreator());
-   dispatch(actionsApp.handleInit(true))
-}
+export const initialize = (): ThunkActionApp => async (dispatch) => {
+  await dispatch(authThunkCreator());
+  dispatch(actionsApp.handleInit(true));
+};
 
 export default appReducer;
+
+type ActionTypesApp = InferActionsTypes<typeof actionsApp>;
+
+export type AppDispatch = ThunkDispatchType<ActionTypesApp>;
+
+type ThunkActionApp = ThunkActionType<ActionTypesApp>;
+
+type InitialStateType = typeof initialState;

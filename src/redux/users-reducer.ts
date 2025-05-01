@@ -1,35 +1,18 @@
-import UsersAPI from "../API/API.ts";
+import UsersAPI from "../API/API";
 import { UserType } from "../types/types";
-import { ThunkAction, ThunkDispatch } from "@reduxjs/toolkit";
-import { InferActionsTypes, RootState } from "./redux-store";
+import {
+  InferActionsTypes,
+  ThunkActionType,
+  ThunkDispatchType,
+} from "./redux-store";
 
-type InitialStateType = {
-  users: UserType[];
-  usersPerPage: number;
-  currentPage: number;
-  isFetching: boolean;
-  FollowingIsProgress: number[];
-  totalCount: number | null;
-};
-
-export type ActionTypesUsers = InferActionsTypes<typeof actionsUsers>
-
-export type UsersDispatch = ThunkDispatch<RootState, unknown, ActionTypesUsers>;
-
-type UsersThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  RootState,
-  unknown,
-  ActionTypesUsers
->;
-
-const initialState: InitialStateType = {
-  users: [],
-  usersPerPage: 6,
-  currentPage: 1,
-  isFetching: false,
-  FollowingIsProgress: [],
-  totalCount: null,
+const initialState = {
+  users: [] as UserType[],
+  usersPerPage: 6 as number,
+  currentPage: 1 as number,
+  isFetching: false as boolean,
+  FollowingIsProgress: [] as number[],
+  totalCount: null as number | null,
 };
 
 const usersReducer = (
@@ -37,7 +20,7 @@ const usersReducer = (
   action: ActionTypesUsers
 ): InitialStateType => {
   switch (action.type) {
-    case 'SET_FOLLOW_USER':
+    case "SET_FOLLOW_USER":
       return {
         ...state,
         users: state.users.map((user: UserType) =>
@@ -50,31 +33,31 @@ const usersReducer = (
         ),
       };
 
-    case 'SET_USERS':
+    case "SET_USERS":
       return {
         ...state,
         users: [...action.newUsers],
       };
 
-    case 'SET_PAGINATION':
+    case "SET_PAGINATION":
       return {
         ...state,
         usersPerPage: action.usersPerPage,
         totalCount: action.totalCount,
       };
 
-    case 'SET_CURRENT_PAGE':
+    case "SET_CURRENT_PAGE":
       return {
         ...state,
         currentPage: action.currentPage,
       };
 
-    case 'SET_FETCHING':
+    case "SET_FETCHING":
       return {
         ...state,
         isFetching: action.isFetching,
       };
-    case 'SET_FOLLOWING_PROGRESS':
+    case "SET_FOLLOWING_PROGRESS":
       return {
         ...state,
         FollowingIsProgress: action.isFetching
@@ -88,44 +71,37 @@ const usersReducer = (
 };
 
 export const actionsUsers = {
-   handleFollow: (
-    newFollow: boolean,
-    idOfUser: number
-  ) => ({ type: 'SET_FOLLOW_USER', newFollow, idOfUser } as const),
-   handleUsers: (newUsers: UserType[]) => ({
-    type: 'SET_USERS',
-    newUsers,
-  } as const),
-   handlePagination: (
-    usersPerPage: number,
-    totalCount: number
-  ) => ({
-    type: 'SET_PAGINATION',
-    usersPerPage,
-    totalCount,
-  } as const),
+  handleFollow: (newFollow: boolean, idOfUser: number) =>
+    ({ type: "SET_FOLLOW_USER", newFollow, idOfUser } as const),
+  handleUsers: (newUsers: UserType[]) =>
+    ({
+      type: "SET_USERS",
+      newUsers,
+    } as const),
+  handlePagination: (usersPerPage: number, totalCount: number) =>
+    ({
+      type: "SET_PAGINATION",
+      usersPerPage,
+      totalCount,
+    } as const),
 
-   handleCurrentPage: (currentPage: number) => ({
-    type: 'SET_CURRENT_PAGE',
-    currentPage,
-  } as const),
-   handleFetching: (isFetching: boolean) => ({
-    type: 'SET_FETCHING',
-    isFetching,
-  } as const),
-   handleFollowingProgress: (
-    isFetching: boolean,
-    userId: number
-  ) => ({
-    type: 'SET_FOLLOWING_PROGRESS',
-    isFetching,
-    userId,
-  } as const)
-}
-
-
-
-
+  handleCurrentPage: (currentPage: number) =>
+    ({
+      type: "SET_CURRENT_PAGE",
+      currentPage,
+    } as const),
+  handleFetching: (isFetching: boolean) =>
+    ({
+      type: "SET_FETCHING",
+      isFetching,
+    } as const),
+  handleFollowingProgress: (isFetching: boolean, userId: number) =>
+    ({
+      type: "SET_FOLLOWING_PROGRESS",
+      isFetching,
+      userId,
+    } as const),
+};
 
 export const getUsersThunkCreator = (
   currentPage: number,
@@ -136,13 +112,18 @@ export const getUsersThunkCreator = (
     const response = await UsersAPI.getUsersAPI({ currentPage, usersPerPage });
     dispatch(actionsUsers.handleFetching(false));
     dispatch(actionsUsers.handleUsers(response.items));
-    if(response.totalCount){
-      dispatch(actionsUsers.handlePagination(usersPerPage, response.totalCount)); // Передаем общее количество пользователей
+    if (response.totalCount) {
+      dispatch(
+        actionsUsers.handlePagination(usersPerPage, response.totalCount)
+      ); // Передаем общее количество пользователей
     }
   };
 };
 
-export const followUsersThunkCreator = (id: number, followed: boolean):UsersThunk => {
+export const followUsersThunkCreator = (
+  id: number,
+  followed: boolean
+): UsersThunk => {
   return async (dispatch) => {
     dispatch(actionsUsers.handleFollowingProgress(true, id));
     try {
@@ -156,10 +137,18 @@ export const followUsersThunkCreator = (id: number, followed: boolean):UsersThun
       }
     } catch (error) {
       console.error("Error following user:", error);
-    } finally {
-      dispatch(actionsUsers.handleFollowingProgress(false, id));
     }
+    dispatch(actionsUsers.handleFollowingProgress(false, id));
+
   };
 };
 
 export default usersReducer;
+
+export type ActionTypesUsers = InferActionsTypes<typeof actionsUsers>;
+
+export type UsersDispatch = ThunkDispatchType<ActionTypesUsers>;
+
+type UsersThunk = ThunkActionType<ActionTypesUsers>;
+
+export type InitialStateType = typeof initialState;

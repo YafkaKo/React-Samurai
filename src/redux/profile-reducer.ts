@@ -1,7 +1,10 @@
 import { ProfileAPI } from "../API/API.ts";
 import { PostType, ProfileType } from "../types/types";
-import { ThunkAction, ThunkDispatch } from "@reduxjs/toolkit";
-import { InferActionsTypes, RootState } from "./redux-store.ts";
+import {
+  InferActionsTypes,
+  ThunkActionType,
+  ThunkDispatchType,
+} from "./redux-store.ts";
 
 const initialState = {
   posts: [] as PostType[],
@@ -9,19 +12,6 @@ const initialState = {
   isFetching: false as boolean,
   status: null as string | null,
 };
-
-type InitialStateType = typeof initialState;
-
-type ActionTypesProfile = InferActionsTypes<typeof actionsProfile>;
-
-export type ProfileDispatch = ThunkDispatch<RootState, unknown, ActionTypesProfile>;
-
-type ProfileThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  RootState,
-  unknown,
-  ActionTypesProfile
->;
 
 const profileReducer = (
   state = initialState,
@@ -68,28 +58,33 @@ const profileReducer = (
 };
 
 export const actionsProfile = {
-  handleProfile: (profile: ProfileType) => ({
-    type: "SET_PROFILE",
-    profile,
-  } as const),
-  handleStatus: (status: string | null) => ({
-    type: "SET_STATUS",
-    status,
-  } as const),
-  handlePost: (newPost: PostType) => ({
-    type: "ADD_POST",
-    newPost,
-  } as const),
+  handleProfile: (profile: ProfileType) =>
+    ({
+      type: "SET_PROFILE",
+      profile,
+    } as const),
+  handleStatus: (status: string | null) =>
+    ({
+      type: "SET_STATUS",
+      status,
+    } as const),
+  handlePost: (newPost: PostType) =>
+    ({
+      type: "ADD_POST",
+      newPost,
+    } as const),
 
-  handleFetching: (isFetching: boolean) => ({
-    type: "SET_PROFILE_FETCHING",
-    isFetching,
-  } as const),
-  handleLikesCount: (idOfPost: number, newLikesCount: number) => ({
-    type: "SET_LIKE_COUNT",
-    idOfPost,
-    newLikesCount,
-  } as const),
+  handleFetching: (isFetching: boolean) =>
+    ({
+      type: "SET_PROFILE_FETCHING",
+      isFetching,
+    } as const),
+  handleLikesCount: (idOfPost: number, newLikesCount: number) =>
+    ({
+      type: "SET_LIKE_COUNT",
+      idOfPost,
+      newLikesCount,
+    } as const),
 };
 
 export const getProfileThunkCreator = (id: string): ProfileThunk => {
@@ -150,3 +145,11 @@ export const putProfileThunkCreator =
   };
 
 export default profileReducer;
+
+type InitialStateType = typeof initialState;
+
+type ActionTypesProfile = InferActionsTypes<typeof actionsProfile>;
+
+export type ProfileDispatch = ThunkDispatchType<ActionTypesProfile>;
+
+type ProfileThunk = ThunkActionType<ActionTypesProfile>;
