@@ -12,9 +12,11 @@ export enum ResultCodeEnum {
   Error = 1
 }
 
-type UsersQueryParams = {
+export type UsersQueryParams = {
   currentPage: number;
   usersPerPage: number;
+  term: string|undefined;
+  friend: boolean|undefined
 };
 
 type AuthMeType = {
@@ -40,10 +42,15 @@ type GetUsersAPIType = {
 }
 
 const UsersAPI = {
-  async getUsersAPI({ currentPage, usersPerPage }: UsersQueryParams) {
-    return instance
+  async getUsersAPI({ currentPage, usersPerPage,term, friend }: UsersQueryParams) {
+    if(!term&&term===''){
+      return instance
       .get<GetUsersAPIType>(`users?page=${currentPage}&count=${usersPerPage}`)
       .then((response) => response.data);
+    }
+    return instance
+    .get<GetUsersAPIType>(`users?page=${currentPage}&count=${usersPerPage}&term=${term}`+ (friend===false? '':`&friend=${friend}` ))
+    .then((response) => response.data);
   },
 
   async followUsersAPI(userId: number) {
@@ -51,7 +58,7 @@ const UsersAPI = {
   },
   async unFollowUsersAPI(userId: number) {
     return instance
-      .delete<ResultType>(`foll ow/${userId}`) // Changed from POST to DELETE
+      .delete<ResultType>(`follow/${userId}`) // Changed from POST to DELETE
       .then((response) => response.data);
   },
 };

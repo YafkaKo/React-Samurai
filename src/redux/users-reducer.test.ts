@@ -83,6 +83,10 @@ beforeEach(() => {
     usersPerPage: 6,
     currentPage: 1,
     isFetching: false,
+    filter: {
+      term: '' ,
+      isFriend: false
+    },
     FollowingIsProgress: [2, 4], // Массив ID пользователей, у которых в процессе подписка/отписка
     totalCount: 100,
   };

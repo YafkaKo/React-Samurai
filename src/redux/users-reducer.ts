@@ -1,4 +1,4 @@
-import UsersAPI from "../API/API";
+import UsersAPI from "../API/API.ts";
 import { UserType } from "../types/types";
 import {
   InferActionsTypes,
@@ -10,6 +10,10 @@ const initialState = {
   users: [] as UserType[],
   usersPerPage: 6 as number,
   currentPage: 1 as number,
+  filter: {
+    term: '' as string,
+    isFriend: false as boolean
+  },
   isFetching: false as boolean,
   FollowingIsProgress: [] as number[],
   totalCount: null as number | null,
@@ -64,6 +68,14 @@ const usersReducer = (
           ? [...state.FollowingIsProgress, action.userId]
           : state.FollowingIsProgress.filter((id) => id !== action.userId),
       };
+    case "SET_FILTER":
+      return {
+        ...state,
+        filter: {
+          term: action.term ? action.term : '',
+          isFriend: action.isFriend ? action.isFriend : false
+        }
+      };
 
     default:
       return state;
@@ -71,6 +83,13 @@ const usersReducer = (
 };
 
 export const actionsUsers = {
+  handleFilter: (term?: string,isFriend?: boolean) =>
+    (
+      {
+      type: "SET_FILTER",
+      term,
+      isFriend
+    } as const),
   handleFollow: (newFollow: boolean, idOfUser: number) =>
     ({ type: "SET_FOLLOW_USER", newFollow, idOfUser } as const),
   handleUsers: (newUsers: UserType[]) =>
@@ -105,17 +124,19 @@ export const actionsUsers = {
 
 export const getUsersThunkCreator = (
   currentPage: number,
-  usersPerPage: number
+  usersPerPage: number,
+  term?: string,
+  friend?:boolean
 ): UsersThunk => {
   return async (dispatch) => {
     dispatch(actionsUsers.handleFetching(true));
-    const response = await UsersAPI.getUsersAPI({ currentPage, usersPerPage });
+    const response = await UsersAPI.getUsersAPI({ currentPage, usersPerPage,term, friend });
     dispatch(actionsUsers.handleFetching(false));
     dispatch(actionsUsers.handleUsers(response.items));
     if (response.totalCount) {
       dispatch(
         actionsUsers.handlePagination(usersPerPage, response.totalCount)
-      ); // Передаем общее количество пользователей
+      );
     }
   };
 };
@@ -152,3 +173,5 @@ export type UsersDispatch = ThunkDispatchType<ActionTypesUsers>;
 type UsersThunk = ThunkActionType<ActionTypesUsers>;
 
 export type InitialStateType = typeof initialState;
+
+export type FilterType = typeof initialState.filter

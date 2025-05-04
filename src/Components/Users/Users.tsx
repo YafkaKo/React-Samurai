@@ -14,16 +14,19 @@ import {
 } from "@mui/material";
 import {
   followUsersThunkCreator,
+  getUsersThunkCreator,
   UsersDispatch,
 } from "../../redux/users-reducer.ts";
 import { useDispatch } from "react-redux";
 import { UsersPropsType } from "../../types/types.ts";
+import UsersSearchForm from "./UsersSearchForm/UsersSearchForm.tsx";
 
 const Users: FC<UsersPropsType> = (props) => {
   const {
     users,
     usersPerPage,
     handleCurrentPage,
+    handleFilter,
     currentPage,
     totalCount,
     isFetching,
@@ -38,6 +41,13 @@ const Users: FC<UsersPropsType> = (props) => {
 
   const totalPages = Math.ceil(totalCount / usersPerPage);
 
+  const handleSearch = (searchTerm?: string, isFriend?: boolean) => {
+    if (searchTerm && searchTerm.trim().length >= 3) {
+      handleFilter(searchTerm.trim())
+      dispatch(getUsersThunkCreator(1, usersPerPage, searchTerm.trim(), isFriend));
+  }
+}
+
   return (
     <Box
       sx={{
@@ -47,6 +57,7 @@ const Users: FC<UsersPropsType> = (props) => {
         flexGrow: 1,
       }}
     >
+      <UsersSearchForm onSearch={handleSearch} />
       <Pagination
         count={totalPages} // Общее количество страниц
         page={currentPage} // Текущая страница
@@ -148,5 +159,6 @@ const Users: FC<UsersPropsType> = (props) => {
     </Box>
   );
 };
+
 
 export default Users;

@@ -16,7 +16,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { AuthDispatch, loginThunkCreator } from "../../redux/auth-reducer.ts";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 
 type LoginFormInputs = {
@@ -48,7 +48,6 @@ const Login:FC = () => {
   });
 
   const dispatch = useDispatch<AuthDispatch>();
-  const navigate = useNavigate();
   const [authError, setAuthError] = useState<string|undefined>(undefined)
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
@@ -57,13 +56,13 @@ const Login:FC = () => {
     const { email, password } = data;
     const result = await dispatch(loginThunkCreator(email, password));
 
-    if (result.success) {
+    if (result) {
+      if(result.success)
         // Перенаправление при успешной авторизации
         // navigate("/profile");
         setOpenSnackbar(true);
-        setTimeout(() => navigate("/profile"), 3000);
     } else {
-      setAuthError(result.message);
+      setAuthError(result);
     }
   };
 

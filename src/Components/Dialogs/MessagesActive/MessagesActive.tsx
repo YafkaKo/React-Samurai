@@ -1,13 +1,14 @@
 import React, { FC, FormEvent, KeyboardEvent, useState } from 'react'
 import { Box, Stack, Typography, IconButton, Input } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
-import {ChatType, MessageType} from '../../../redux/dialogs-reducer'
-import { ActionType } from '../../../types/types'
+import {ActionTypesDialogs, ChatType, MessageType} from '../../../redux/dialogs-reducer'
+
+
 
 interface PropsType {
     messages: MessageType[];
     activeChat: ChatType;
-    handleMessage: (idOfUser:number, newMessage:MessageType) => ActionType,
+    handleMessage: (idOfUser:number, newMessage:MessageType) => ActionTypesDialogs,
 }
 
 const MessagesActive: FC<PropsType> = (props) => {

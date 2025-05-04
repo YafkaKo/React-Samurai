@@ -18,6 +18,7 @@ const selectUsersData = createSelector(
     users: usersPage.users,
     currentPage: usersPage.currentPage,
     usersPerPage: usersPage.usersPerPage,
+    filter: usersPage.filter,
     totalCount: usersPage.totalCount,
     isFetching: usersPage.isFetching,
     FollowingIsProgress: usersPage.FollowingIsProgress
@@ -30,12 +31,13 @@ const UsersContainer: FC = () => {
   const usersData = useSelector(selectUsersData);
 
   useEffect(() => {
-    dispatch(getUsersThunkCreator(usersData.currentPage, usersData.usersPerPage));
-  }, [usersData.currentPage, usersData.usersPerPage, dispatch]);
+    dispatch(getUsersThunkCreator(usersData.currentPage, usersData.usersPerPage,usersData.filter.term,usersData.filter.isFriend));
+  }, [usersData.currentPage, usersData.usersPerPage,usersData.filter, dispatch]);
 
   const usersProps:UsersPropsType = {
     ...usersData,
-    handleCurrentPage: (page:number) => dispatch(actionsUsers.handleCurrentPage(page)),
+    handleCurrentPage: (page) => dispatch(actionsUsers.handleCurrentPage(page)),
+    handleFilter: (term,isFriend) => dispatch(actionsUsers.handleFilter(term,isFriend))
   };
 
   return <Users {...usersProps} />;

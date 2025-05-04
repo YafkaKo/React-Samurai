@@ -1,4 +1,5 @@
-import { ActionTypesUsers } from "../redux/users-reducer";
+
+import {  ActionTypesUsers, InitialStateType } from "../redux/users-reducer";
 
 export type PostType = {
   id: number;
@@ -43,15 +44,7 @@ export type ProfileType = {
   followed?: boolean;
 };
 
-export type UsersStateType = {
-  users: UserType[];
-  usersPerPage: number;
-  currentPage: number;
-  isFetching: boolean;
-  FollowingIsProgress: number[];
-  totalCount: number | null;
-};
-
-export type UsersPropsType = UsersStateType & {
+export type UsersPropsType = InitialStateType & {
   handleCurrentPage: (page: number) => ActionTypesUsers;
+  handleFilter: (term?:string,isFriend?:boolean) => ActionTypesUsers
 };
